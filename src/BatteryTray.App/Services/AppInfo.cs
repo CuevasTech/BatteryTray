@@ -17,9 +17,30 @@ internal static unsafe class AppInfo
 
     public static bool IsPackaged => s_isPackaged.Value;
 
-    /// <summary>%LOCALAPPDATA%\BatteryTray (en la versión de la Store, Windows lo redirige al almacenamiento del paquete).</summary>
-    public static string DataDirectory { get; } =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BatteryTray");
+    /// <summary>
+    /// Carpeta de datos (ajustes, caché y registros).
+    /// - Versión de la Store: la carpeta local del paquete (…\Packages\&lt;app&gt;\LocalState). Es una ruta
+    ///   real (se puede abrir en el Explorador) y Windows la borra al desinstalar la app.
+    /// - Sin paquete (desarrollo): %LOCALAPPDATA%\BatteryTray.
+    /// </summary>
+    public static string DataDirectory { get; } = ResolveDataDirectory();
+
+    private static string ResolveDataDirectory()
+    {
+        if (IsPackaged)
+        {
+            try
+            {
+                return global::Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+            }
+            catch (Exception)
+            {
+                // Si no estuviera disponible, se usa la ruta de siempre.
+            }
+        }
+
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BatteryTray");
+    }
 
     public static string SettingsPath => Path.Combine(DataDirectory, "settings.json");
 

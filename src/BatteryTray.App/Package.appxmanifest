@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Manifiesto del paquete MSIX (solo para la versión de la Microsoft Store).
-  Antes de publicar hay que sustituir Identity Name/Publisher y PublisherDisplayName
-  por los valores que da Partner Center al reservar el nombre de la app.
+  Manifiesto del paquete MSIX para la Microsoft Store.
+  Identity Name, Publisher y PublisherDisplayName son los que asignó Partner Center
+  a la app (Administración de productos > Identidad del producto): no cambiarlos.
 -->
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
@@ -13,13 +13,13 @@
   IgnorableNamespaces="uap desktop com rescap">
 
   <Identity
-    Name="BatteryTray"
-    Publisher="CN=BatteryTray"
+    Name="CuevasTech.BatteryTray"
+    Publisher="CN=7B14860F-70FA-44EA-98D2-54F99AD6920A"
     Version="0.1.0.0" />
 
   <Properties>
     <DisplayName>ms-resource:AppDisplayName</DisplayName>
-    <PublisherDisplayName>BatteryTray contributors</PublisherDisplayName>
+    <PublisherDisplayName>Cuevas Tech</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

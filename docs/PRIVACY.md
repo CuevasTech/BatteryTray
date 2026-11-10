@@ -13,7 +13,7 @@ Para funcionar, lee en tu propio equipo:
 - La lista de dispositivos Bluetooth emparejados (nombre, tipo, estado de conexión y nivel de batería).
 - La batería del propio equipo, si la tiene.
 
-Y guarda, **solo en tu equipo**, en `%LOCALAPPDATA%\BatteryTray`:
+Y guarda, **solo en tu equipo**, en la carpeta privada de la app (puedes abrirla desde *Ajustes > Avanzado > Registros*):
 
 - `settings.json`: tus ajustes (idioma, iconos, avisos, nombres que pongas a los dispositivos).
 - `cache.json`: el último nivel conocido de cada dispositivo, con su nombre y un identificador basado en su dirección Bluetooth.
@@ -21,7 +21,7 @@ Y guarda, **solo en tu equipo**, en `%LOCALAPPDATA%\BatteryTray`:
 
 El botón *Copiar diagnóstico* copia un informe al portapapeles; solo sale de tu equipo si tú decides pegarlo en algún sitio. Las direcciones Bluetooth aparecen ocultas en ese informe.
 
-Para borrar todos los datos, cierra la app y elimina la carpeta `%LOCALAPPDATA%\BatteryTray`.
+Para borrar todos los datos, desinstala la app: Windows elimina su carpeta automáticamente.
 
 Si tienes dudas, abre un aviso en https://github.com/CuevasTech/BatteryTray/issues
 
@@ -36,7 +36,7 @@ To work, it reads on your own computer:
 - The list of paired Bluetooth devices (name, type, connection state and battery level).
 - The computer's own battery, if it has one.
 
-It stores, **only on your computer**, in `%LOCALAPPDATA%\BatteryTray`:
+It stores, **only on your computer**, in the app's private folder (you can open it from *Settings > Advanced > Logs*):
 
 - `settings.json`: your settings (language, icons, alerts, custom device names).
 - `cache.json`: the last known level of each device, with its name and an identifier based on its Bluetooth address.
@@ -44,6 +44,6 @@ It stores, **only on your computer**, in `%LOCALAPPDATA%\BatteryTray`:
 
 The *Copy diagnostics* button copies a report to the clipboard; it only leaves your computer if you choose to paste it somewhere. Bluetooth addresses are masked in that report.
 
-To delete all data, exit the app and delete the `%LOCALAPPDATA%\BatteryTray` folder.
+To delete all data, uninstall the app: Windows removes its folder automatically.
 
 Questions: open an issue at https://github.com/CuevasTech/BatteryTray/issues
