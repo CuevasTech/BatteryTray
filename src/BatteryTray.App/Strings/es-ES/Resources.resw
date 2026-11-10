@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppDisplayName" xml:space="preserve"><value>BatteryTray</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Batería de tus dispositivos Bluetooth en la barra de tareas</value></data>
+  <data name="ThisPc" xml:space="preserve"><value>Este equipo</value></data>
+  <data name="FlyoutTitle" xml:space="preserve"><value>Baterías</value></data>
+  <data name="RefreshTooltip" xml:space="preserve"><value>Actualizar</value></data>
+  <data name="SettingsTooltip" xml:space="preserve"><value>Ajustes</value></data>
+  <data name="EmptyTitle" xml:space="preserve"><value>No hay dispositivos con batería</value></data>
+  <data name="EmptyBody" xml:space="preserve"><value>Conecta un dispositivo Bluetooth. Si Windows conoce su batería, aparecerá aquí.</value></data>
+  <data name="BluetoothSettings" xml:space="preserve"><value>Ajustes de Bluetooth</value></data>
+  <data name="StatusConnected" xml:space="preserve"><value>Conectado</value></data>
+  <data name="StatusCharging" xml:space="preserve"><value>Cargando</value></data>
+  <data name="StatusDisconnected" xml:space="preserve"><value>Desconectado</value></data>
+  <data name="StatusLow" xml:space="preserve"><value>Batería baja</value></data>
+  <data name="StatusLastSeen" xml:space="preserve"><value>último valor {0}</value></data>
+  <data name="StatusUnknownLevel" xml:space="preserve"><value>Nivel desconocido</value></data>
+  <data name="TimeJustNow" xml:space="preserve"><value>hace un momento</value></data>
+  <data name="TimeMinutes" xml:space="preserve"><value>hace {0} min</value></data>
+  <data name="TimeHours" xml:space="preserve"><value>hace {0} h</value></data>
+  <data name="TimeDays" xml:space="preserve"><value>hace {0} d</value></data>
+  <data name="UpdatedAt" xml:space="preserve"><value>Actualizado a las {0}</value></data>
+  <data name="DemoBanner" xml:space="preserve"><value>Modo demostración: dispositivos simulados</value></data>
+  <data name="WelcomeTitle" xml:space="preserve"><value>BatteryTray está en marcha</value></data>
+  <data name="WelcomeBody" xml:space="preserve"><value>¿Quieres que se abra al iniciar Windows?</value></data>
+  <data name="WelcomeEnable" xml:space="preserve"><value>Sí, iniciar con Windows</value></data>
+  <data name="A11yDevice" xml:space="preserve"><value>{0}, {1}, {2}</value></data>
+  <data name="Percent" xml:space="preserve"><value>{0} %</value></data>
+  <data name="TrayNoDevices" xml:space="preserve"><value>BatteryTray: sin dispositivos con batería</value></data>
+  <data name="TrayCharging" xml:space="preserve"><value>cargando</value></data>
+  <data name="MenuOpen" xml:space="preserve"><value>Ver baterías</value></data>
+  <data name="MenuRefresh" xml:space="preserve"><value>Actualizar ahora</value></data>
+  <data name="MenuSettings" xml:space="preserve"><value>Ajustes…</value></data>
+  <data name="MenuStartup" xml:space="preserve"><value>Iniciar con Windows</value></data>
+  <data name="MenuExit" xml:space="preserve"><value>Salir</value></data>
+  <data name="NotifyLowTitle" xml:space="preserve"><value>Batería baja: {0}</value></data>
+  <data name="NotifyLowBody" xml:space="preserve"><value>Queda un {0} %. Ponlo a cargar pronto.</value></data>
+  <data name="NotifyConnectedTitle" xml:space="preserve"><value>{0} conectado</value></data>
+  <data name="NotifyDisconnectedTitle" xml:space="preserve"><value>{0} desconectado</value></data>
+  <data name="NotifyBatteryBody" xml:space="preserve"><value>Batería: {0} %</value></data>
+  <data name="SettingsTitle" xml:space="preserve"><value>Ajustes</value></data>
+  <data name="SectionGeneral" xml:space="preserve"><value>General</value></data>
+  <data name="StartupHeader" xml:space="preserve"><value>Iniciar con Windows</value></data>
+  <data name="StartupDesc" xml:space="preserve"><value>Abre BatteryTray al iniciar sesión</value></data>
+  <data name="StartupBlocked" xml:space="preserve"><value>Desactivado desde el Administrador de tareas o la configuración de Windows</value></data>
+  <data name="LanguageHeader" xml:space="preserve"><value>Idioma</value></data>
+  <data name="LanguageDesc" xml:space="preserve"><value>Se aplica al reiniciar la app</value></data>
+  <data name="LanguageAuto" xml:space="preserve"><value>Igual que Windows</value></data>
+  <data name="RestartTitle" xml:space="preserve"><value>Reinicia la app para cambiar el idioma</value></data>
+  <data name="RestartNow" xml:space="preserve"><value>Reiniciar ahora</value></data>
+  <data name="SectionTaskbar" xml:space="preserve"><value>Barra de tareas</value></data>
+  <data name="TrayModeHeader" xml:space="preserve"><value>Iconos</value></data>
+  <data name="TrayModeDesc" xml:space="preserve"><value>Cuántos iconos se muestran junto al reloj</value></data>
+  <data name="TrayModePerDevice" xml:space="preserve"><value>Uno por dispositivo</value></data>
+  <data name="TrayModeSingle" xml:space="preserve"><value>Uno solo (el nivel más bajo)</value></data>
+  <data name="IconStyleHeader" xml:space="preserve"><value>Estilo del icono</value></data>
+  <data name="IconStyleDesc" xml:space="preserve"><value>Qué se dibuja en cada icono</value></data>
+  <data name="IconStylePercentage" xml:space="preserve"><value>Porcentaje</value></data>
+  <data name="IconStyleDevice" xml:space="preserve"><value>Icono del dispositivo</value></data>
+  <data name="PinHeader" xml:space="preserve"><value>Mostrar siempre los iconos</value></data>
+  <data name="PinDesc" xml:space="preserve"><value>Windows esconde los iconos nuevos tras la flecha ^. Actívalos en «Otros iconos de la bandeja del sistema».</value></data>
+  <data name="PinButton" xml:space="preserve"><value>Abrir configuración</value></data>
+  <data name="SectionNotifications" xml:space="preserve"><value>Avisos</value></data>
+  <data name="LowBatteryHeader" xml:space="preserve"><value>Avisar con batería baja</value></data>
+  <data name="LowBatteryDesc" xml:space="preserve"><value>Avisa una vez cuando un dispositivo baja de este nivel</value></data>
+  <data name="ConnectionHeader" xml:space="preserve"><value>Avisar al conectar o desconectar</value></data>
+  <data name="ConnectionDesc" xml:space="preserve"><value>Muestra una notificación con la batería al conectar un dispositivo</value></data>
+  <data name="SectionDevices" xml:space="preserve"><value>Dispositivos</value></data>
+  <data name="DevicesDesc" xml:space="preserve"><value>Dispositivos que han informado de su batería alguna vez</value></data>
+  <data name="DevicesEmpty" xml:space="preserve"><value>Aún no se ha detectado ningún dispositivo con batería.</value></data>
+  <data name="DeviceShow" xml:space="preserve"><value>Mostrar en la app</value></data>
+  <data name="DeviceTrayIcon" xml:space="preserve"><value>Icono propio en la barra</value></data>
+  <data name="DeviceRename" xml:space="preserve"><value>Cambiar nombre…</value></data>
+  <data name="DeviceForget" xml:space="preserve"><value>Olvidar</value></data>
+  <data name="DeviceOptions" xml:space="preserve"><value>Opciones</value></data>
+  <data name="DeviceHidden" xml:space="preserve"><value>Oculto</value></data>
+  <data name="RenameTitle" xml:space="preserve"><value>Cambiar nombre</value></data>
+  <data name="RenamePlaceholder" xml:space="preserve"><value>Déjalo vacío para usar el nombre original</value></data>
+  <data name="Save" xml:space="preserve"><value>Guardar</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="SectionAdvanced" xml:space="preserve"><value>Avanzado</value></data>
+  <data name="DemoHeader" xml:space="preserve"><value>Modo demostración</value></data>
+  <data name="DemoDesc" xml:space="preserve"><value>Muestra dispositivos simulados para probar la app sin hardware</value></data>
+  <data name="DiagHeader" xml:space="preserve"><value>Diagnóstico</value></data>
+  <data name="DiagDesc" xml:space="preserve"><value>Copia un informe de lo que detecta la app para reportar fallos. Las direcciones Bluetooth van ocultas.</value></data>
+  <data name="DiagButton" xml:space="preserve"><value>Copiar diagnóstico</value></data>
+  <data name="DiagCopied" xml:space="preserve"><value>Copiado</value></data>
+  <data name="LogsHeader" xml:space="preserve"><value>Registros</value></data>
+  <data name="LogsDesc" xml:space="preserve"><value>Archivos de registro de la app</value></data>
+  <data name="LogsButton" xml:space="preserve"><value>Abrir carpeta</value></data>
+  <data name="SectionAbout" xml:space="preserve"><value>Acerca de</value></data>
+  <data name="AboutVersion" xml:space="preserve"><value>Versión {0}</value></data>
+  <data name="AboutDesc" xml:space="preserve"><value>Software libre con licencia GPL-3.0. No recoge ningún dato.</value></data>
+  <data name="AboutSource" xml:space="preserve"><value>Código fuente y avisos de fallos</value></data>
+  <data name="On" xml:space="preserve"><value>Activado</value></data>
+  <data name="Off" xml:space="preserve"><value>Desactivado</value></data>
+  <data name="KindHeadphones" xml:space="preserve"><value>Auriculares</value></data>
+  <data name="KindSpeaker" xml:space="preserve"><value>Altavoz</value></data>
+  <data name="KindMouse" xml:space="preserve"><value>Ratón</value></data>
+  <data name="KindKeyboard" xml:space="preserve"><value>Teclado</value></data>
+  <data name="KindGamepad" xml:space="preserve"><value>Mando</value></data>
+  <data name="KindPen" xml:space="preserve"><value>Lápiz</value></data>
+  <data name="KindPhone" xml:space="preserve"><value>Teléfono</value></data>
+  <data name="KindComputer" xml:space="preserve"><value>Equipo</value></data>
+  <data name="KindWatch" xml:space="preserve"><value>Reloj</value></data>
+  <data name="KindUnknown" xml:space="preserve"><value>Dispositivo</value></data>
+  <data name="ThresholdHeader" xml:space="preserve"><value>Nivel de aviso</value></data>
+</root>

@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BatteryTray.App/BatteryTray.App.csproj" />
+    <Project Path="src/BatteryTray.Core/BatteryTray.Core.csproj" />
+    <Project Path="src/BatteryTray.Windows/BatteryTray.Windows.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BatteryTray.Core.Tests/BatteryTray.Core.Tests.csproj" />
+    <Project Path="tests/BatteryTray.Windows.Tests/BatteryTray.Windows.Tests.csproj">
+      <Platform Project="x64" />
+    </Project>
+  </Folder>
+</Solution>

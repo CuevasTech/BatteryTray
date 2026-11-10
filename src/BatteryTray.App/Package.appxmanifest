@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Manifiesto del paquete MSIX (solo para la versión de la Microsoft Store).
+  Antes de publicar hay que sustituir Identity Name/Publisher y PublisherDisplayName
+  por los valores que da Partner Center al reservar el nombre de la app.
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap desktop com rescap">
+
+  <Identity
+    Name="BatteryTray"
+    Publisher="CN=BatteryTray"
+    Version="0.1.0.0" />
+
+  <Properties>
+    <DisplayName>ms-resource:AppDisplayName</DisplayName>
+    <PublisherDisplayName>BatteryTray contributors</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+      <uap:VisualElements
+        DisplayName="ms-resource:AppDisplayName"
+        Description="ms-resource:AppDescription"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+      </uap:VisualElements>
+
+      <Extensions>
+        <!-- Iniciar con Windows (el usuario lo activa desde la app; empieza desactivado). -->
+        <desktop:Extension Category="windows.startupTask" Executable="BatteryTray.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="BatteryTrayStartup" Enabled="false" DisplayName="ms-resource:AppDisplayName" />
+        </desktop:Extension>
+
+        <!-- Abrir la app al pulsar una notificación. -->
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:ExeServer Executable="BatteryTray.exe" Arguments="----AppNotificationActivated:" DisplayName="BatteryTray notifications">
+              <com:Class Id="5D3E7B54-1C6F-4E0B-9F36-7A3E2B9C8D41" />
+            </com:ExeServer>
+          </com:ComServer>
+        </com:Extension>
+        <desktop:Extension Category="windows.toastNotificationActivation">
+          <desktop:ToastNotificationActivation ToastActivatorCLSID="5D3E7B54-1C6F-4E0B-9F36-7A3E2B9C8D41" />
+        </desktop:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+    <DeviceCapability Name="bluetooth" />
+  </Capabilities>
+</Package>

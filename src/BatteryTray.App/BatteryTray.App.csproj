@@ -1,0 +1,92 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RootNamespace>BatteryTray</RootNamespace>
+    <AssemblyName>BatteryTray</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
+    <Platforms>x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- Main propio en Program.cs (instancia única). -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+  </PropertyGroup>
+
+  <!--
+    Dos formas de compilar:
+    - Por defecto: app portable (sin paquete), con .NET y Windows App SDK incluidos.
+      Es la que se publica como ZIP en GitHub.
+    - Con -p:Packaged=true: paquete MSIX para la Microsoft Store.
+  -->
+  <PropertyGroup Condition="'$(Packaged)' != 'true'">
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <!-- Quita el código de .NET y de Windows que la app no usa (reduce mucho el tamaño). -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Solo los idiomas que tiene la app. -->
+    <SatelliteResourceLanguages>en;es</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\**\*.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Assets\AppIcon.ico" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" />
+    <!--
+      Windows App SDK 2.x trae por defecto componentes de IA, búsqueda y widgets
+      (onnxruntime, DirectML...) que esta app no usa: se excluyen para no instalar
+      ~100 MB de más ni código innecesario.
+    -->
+    <PackageReference Include="Microsoft.WindowsAppSDK.AI" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.ML" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Search" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Widgets" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.Windows.AI.MachineLearning" ExcludeAssets="all" />
+  </ItemGroup>
+
+  <!--
+    Los archivos de idioma internos de Windows App SDK se limitan a inglés y español
+    (los de la app); en otros idiomas, sus textos internos salen en inglés.
+  -->
+  <Target Name="PruneRuntimeLanguages" AfterTargets="Publish" Condition="'$(PublishDir)' != ''">
+    <ItemGroup>
+      <_LangDirs Include="$([System.IO.Directory]::GetDirectories('$(PublishDir)'))" />
+      <_LangDirsToDelete Include="@(_LangDirs)"
+                         Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Filename)%(Extension)', '^[a-z]{2,3}(-[A-Za-z0-9]+)+$')) and !$([System.Text.RegularExpressions.Regex]::IsMatch('%(Filename)%(Extension)', '^(en|es)(-|$)', RegexOptions.IgnoreCase))" />
+    </ItemGroup>
+    <RemoveDir Directories="@(_LangDirsToDelete)" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BatteryTray.Core\BatteryTray.Core.csproj" />
+    <ProjectReference Include="..\BatteryTray.Windows\BatteryTray.Windows.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+    <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+    <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
+  </PropertyGroup>
+</Project>

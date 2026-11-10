@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Mínimo privilegio: este flujo solo lee el repositorio.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Pruebas del núcleo
+        run: dotnet test --project tests/BatteryTray.Core.Tests/BatteryTray.Core.Tests.csproj
+
+      - name: Pruebas de Windows
+        run: dotnet test --project tests/BatteryTray.Windows.Tests/BatteryTray.Windows.Tests.csproj -p:Platform=x64
+
+      - name: Compilar la app (x64 y ARM64)
+        run: |
+          dotnet build src/BatteryTray.App/BatteryTray.App.csproj -c Release -r win-x64 -p:Platform=x64
+          dotnet build src/BatteryTray.App/BatteryTray.App.csproj -c Release -r win-arm64 -p:Platform=ARM64

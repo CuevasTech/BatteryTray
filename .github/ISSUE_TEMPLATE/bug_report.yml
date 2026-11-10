@@ -1,0 +1,34 @@
+name: Fallo o dispositivo que no aparece / Bug or missing device
+description: Algo no funciona o un dispositivo no muestra su batería / Something doesn't work or a device doesn't show its battery
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Qué pasa / What happens
+      description: Qué esperabas y qué ves / What you expected and what you see
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Dispositivo / Device
+      description: Marca y modelo, y cómo se conecta (Bluetooth, receptor USB…) / Brand, model and connection type
+  - type: dropdown
+    id: windows-shows
+    attributes:
+      label: ¿Windows muestra su batería en Configuración > Bluetooth? / Does Windows show its battery in Settings > Bluetooth?
+      options:
+        - Sí / Yes
+        - No
+        - No lo sé / Don't know
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnóstico / Diagnostics
+      description: Ajustes > Avanzado > Copiar diagnóstico, y pégalo aquí / Settings > Advanced > Copy diagnostics, then paste here
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: Versión de BatteryTray y de Windows / BatteryTray and Windows version

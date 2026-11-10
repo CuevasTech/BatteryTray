@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>0.1.0</Version>
+    <Product>BatteryTray</Product>
+    <Authors>BatteryTray contributors</Authors>
+    <Copyright>Copyright (C) 2026 BatteryTray contributors. GPL-3.0-or-later.</Copyright>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <!-- Seguridad de la cadena de suministro: fija las versiones exactas resueltas
+         en packages.lock.json para que una restauración no traiga paquetes distintos. -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+</Project>
