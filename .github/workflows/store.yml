@@ -29,11 +29,11 @@ jobs:
       TAG: ${{ github.ref_name }}
       INPUT_VERSION: ${{ inputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
@@ -54,7 +54,7 @@ jobs:
         shell: pwsh
         run: ./tools/Pack-Store.ps1 -Version ${{ steps.version.outputs.value }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: BatteryTray-${{ steps.version.outputs.value }}-store
           path: artifacts/store/*.msixbundle
