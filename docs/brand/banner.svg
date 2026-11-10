@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 600" width="1280" height="600" role="img" aria-labelledby="title desc">
+  <title id="title">BatteryTray</title>
+  <desc id="desc">La batería de tus dispositivos Bluetooth en la barra de tareas de Windows: panel al estilo Windows 11 y una batería de color por dispositivo junto al reloj.</desc>
+  <style>
+    .t { font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
+    .bar { transform-box: fill-box; transform-origin: left center; animation: grow 1.4s cubic-bezier(.2,.8,.2,1) both; }
+    .d1 { animation-delay: .35s; } .d2 { animation-delay: .5s; } .d3 { animation-delay: .65s; }
+    .d4 { animation-delay: .8s; } .d5 { animation-delay: .9s; } .d6 { animation-delay: 1s; }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    .charge { transform-box: fill-box; transform-origin: left center; animation: charge 2.6s ease-in-out 1.4s infinite; }
+    @keyframes charge { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.86); } }
+    .pulse { animation: pulse 2.6s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    .float { animation: float 7s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    .rise { animation: rise .9s cubic-bezier(.2,.8,.2,1) both; }
+    .rise2 { animation: rise .9s cubic-bezier(.2,.8,.2,1) .15s both; }
+    @keyframes rise { from { transform: translateY(26px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .glow { animation: drift 14s ease-in-out infinite alternate; }
+    @keyframes drift { from { transform: translate(0, 0); } to { transform: translate(40px, 18px); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <clipPath id="frame"><rect width="1280" height="600" rx="28"/></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1022"/>
+      <stop offset="1" stop-color="#121A33"/>
+    </linearGradient>
+    <radialGradient id="gBlue" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#2E8BFF" stop-opacity="0.45"/><stop offset="1" stop-color="#2E8BFF" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gPurple" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#8A5BFF" stop-opacity="0.42"/><stop offset="1" stop-color="#8A5BFF" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gOrange" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FF7B3A" stop-opacity="0.30"/><stop offset="1" stop-color="#FF7B3A" stop-opacity="0"/></radialGradient>
+    <!-- Logo -->
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#303B5C"/><stop offset="1" stop-color="#141A2C"/></linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C9D3E6"/></linearGradient>
+    <linearGradient id="lBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9BE7FF"/><stop offset="1" stop-color="#2E8BFF"/></linearGradient>
+    <linearGradient id="lPurple" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E4CBFF"/><stop offset="1" stop-color="#8A5BFF"/></linearGradient>
+    <linearGradient id="lOrange" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD89A"/><stop offset="1" stop-color="#FF7B3A"/></linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.35"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+    <radialGradient id="shadow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <!-- Panel -->
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262D40" stop-opacity="0.96"/><stop offset="1" stop-color="#1C2131" stop-opacity="0.96"/></linearGradient>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1280" height="600" fill="url(#bg)"/>
+    <g class="glow">
+      <ellipse cx="230" cy="70" rx="460" ry="280" fill="url(#gBlue)"/>
+      <ellipse cx="1120" cy="110" rx="420" ry="280" fill="url(#gPurple)"/>
+      <ellipse cx="860" cy="640" rx="560" ry="240" fill="url(#gOrange)"/>
+    </g>
+    <!-- Brillo fino del borde, como las ventanas de Windows 11 -->
+    <rect x="0.5" y="0.5" width="1279" height="599" rx="28" fill="none" stroke="#FFFFFF" stroke-opacity="0.08"/>
+
+    <!-- ===================== Izquierda: logo y texto ===================== -->
+    <g class="float">
+      <g transform="translate(70 60) scale(0.7)">
+        <ellipse cx="118" cy="224" rx="96" ry="15" fill="url(#shadow)"/>
+        <g transform="translate(30 -66) rotate(-21 128 136)">
+          <rect x="44" y="98" width="152" height="78" rx="22" fill="url(#body)" stroke="url(#rim)" stroke-width="9"/>
+          <rect x="200" y="120" width="11" height="34" rx="5" fill="url(#rim)"/>
+          <rect x="61" y="115" width="122" height="44" rx="9" fill="url(#lOrange)"/>
+        </g>
+        <g transform="translate(13 -30) rotate(-10 128 136)">
+          <rect x="44" y="98" width="152" height="78" rx="22" fill="url(#body)" stroke="url(#rim)" stroke-width="9"/>
+          <rect x="200" y="120" width="11" height="34" rx="5" fill="url(#rim)"/>
+          <rect x="61" y="115" width="112" height="44" rx="9" fill="url(#lPurple)"/>
+        </g>
+        <g transform="translate(-10 36)">
+          <rect x="44" y="98" width="152" height="78" rx="22" fill="url(#body)" stroke="url(#rim)" stroke-width="9"/>
+          <rect x="200" y="120" width="11" height="34" rx="5" fill="url(#rim)"/>
+          <rect x="61" y="115" width="106" height="44" rx="9" fill="url(#lBlue)"/>
+          <rect x="61" y="115" width="106" height="20" rx="9" fill="url(#gloss)"/>
+        </g>
+      </g>
+    </g>
+
+    <g class="rise">
+      <text class="t" x="80" y="320" font-size="76" font-weight="700" fill="#FFFFFF" letter-spacing="-1">BatteryTray</text>
+      <text class="t" x="82" y="372" font-size="27" fill="#C9D2E8">La batería de tus dispositivos,</text>
+      <text class="t" x="82" y="408" font-size="27" fill="#C9D2E8">en la barra de tareas de Windows.</text>
+      <text class="t" x="82" y="446" font-size="18" fill="#8793B3">Your devices' battery, right in the Windows taskbar.</text>
+    </g>
+
+    <!-- Etiquetas -->
+    <g class="rise2 t" font-size="15" font-weight="600">
+      <g transform="translate(82 488)">
+        <rect width="82" height="34" rx="17" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.14"/>
+        <text x="41" y="22" text-anchor="middle" fill="#E6ECFA">Gratis</text>
+      </g>
+      <g transform="translate(176 488)">
+        <rect width="138" height="34" rx="17" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.14"/>
+        <text x="69" y="22" text-anchor="middle" fill="#E6ECFA">Código abierto</text>
+      </g>
+      <g transform="translate(326 488)">
+        <rect width="124" height="34" rx="17" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.14"/>
+        <text x="62" y="22" text-anchor="middle" fill="#E6ECFA">Sin anuncios</text>
+      </g>
+      <g transform="translate(462 488)">
+        <rect width="100" height="34" rx="17" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.14"/>
+        <text x="50" y="22" text-anchor="middle" fill="#E6ECFA">Sin datos</text>
+      </g>
+    </g>
+
+    <!-- ===================== Derecha: panel ===================== -->
+    <g class="rise">
+      <rect x="742" y="58" width="452" height="384" rx="16" fill="url(#card)" stroke="#FFFFFF" stroke-opacity="0.12"/>
+      <text class="t" x="770" y="100" font-size="18" font-weight="700" fill="#FFFFFF">Baterías</text>
+      <!-- Botones de actualizar y ajustes -->
+      <g fill="none" stroke="#DCE3F2" stroke-width="2" stroke-linecap="round">
+        <path d="M1131 94 a8 8 0 1 1 -2.5 -6 M1129 82 v6 h-6"/>
+        <circle cx="1166" cy="94" r="4"/>
+        <circle cx="1166" cy="94" r="9" stroke-dasharray="3.4 3.6"/>
+      </g>
+
+      <!-- Fila 1: auriculares (azul) -->
+      <g transform="translate(0 120)">
+        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07" stroke="#60CDFF" stroke-width="3"/>
+        <g transform="translate(792 34)" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round">
+          <path d="M-10 5 v-4 a10 10 0 0 1 20 0 v4"/>
+          <rect x="-12" y="2" width="5" height="9" rx="2.5" fill="#FFFFFF" stroke="none"/>
+          <rect x="7" y="2" width="5" height="9" rx="2.5" fill="#FFFFFF" stroke="none"/>
+        </g>
+        <text class="t" x="832" y="28" font-size="17" font-weight="700" fill="#FFFFFF">WH-1000XM5</text>
+        <text class="t" x="1166" y="28" font-size="17" font-weight="700" fill="#FFFFFF" text-anchor="end">82 %</text>
+        <text class="t" x="832" y="50" font-size="13.5" fill="#A9B3C9">Conectado</text>
+        <rect x="832" y="62" width="334" height="4" rx="2" fill="#FFFFFF" fill-opacity="0.16"/>
+        <rect class="bar d1" x="832" y="61" width="274" height="6" rx="3" fill="#60CDFF"/>
+      </g>
+
+      <!-- Fila 2: ratón (morado) -->
+      <g transform="translate(0 206)">
+        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07" stroke="#C5A3FF" stroke-width="3"/>
+        <g transform="translate(792 34)" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round">
+          <rect x="-7" y="-11" width="14" height="22" rx="7"/>
+          <path d="M0 -11 v7"/>
+        </g>
+        <text class="t" x="832" y="28" font-size="17" font-weight="700" fill="#FFFFFF">MX Master 3S</text>
+        <text class="t" x="1166" y="28" font-size="17" font-weight="700" fill="#FFFFFF" text-anchor="end">46 %</text>
+        <text class="t" x="832" y="50" font-size="13.5" fill="#A9B3C9">Conectado</text>
+        <rect x="832" y="62" width="334" height="4" rx="2" fill="#FFFFFF" fill-opacity="0.16"/>
+        <rect class="bar d2" x="832" y="61" width="154" height="6" rx="3" fill="#C5A3FF"/>
+      </g>
+
+      <!-- Fila 3: mando (naranja), cargando -->
+      <g transform="translate(0 292)">
+        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07" stroke="#FFAE57" stroke-width="3"/>
+        <g transform="translate(792 34)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M-9 -6 h18 a6 6 0 0 1 5.8 4.5 l2.2 8 a3.5 3.5 0 0 1 -6 3 l-3 -3.5 h-14 l-3 3.5 a3.5 3.5 0 0 1 -6 -3 l2.2 -8 a6 6 0 0 1 5.8 -4.5 z"/>
+          <path d="M-8 -1 v5 M-10.5 1.5 h5"/>
+          <circle cx="7" cy="0" r="1" fill="#FFFFFF"/>
+          <circle cx="9.5" cy="3" r="1" fill="#FFFFFF"/>
+        </g>
+        <text class="t" x="832" y="28" font-size="17" font-weight="700" fill="#FFFFFF">Mando Xbox</text>
+        <text class="t" x="1166" y="28" font-size="17" font-weight="700" fill="#FFFFFF" text-anchor="end">64 %</text>
+        <text class="t" x="832" y="50" font-size="13.5" fill="#A9B3C9">Conectado · Cargando</text>
+        <rect x="832" y="62" width="334" height="4" rx="2" fill="#FFFFFF" fill-opacity="0.16"/>
+        <rect class="bar d3" x="832" y="61" width="214" height="6" rx="3" fill="#FFAE57"/>
+      </g>
+
+      <!-- Pie del panel -->
+      <path d="M742 396 h452 v30 a16 16 0 0 1 -16 16 h-420 a16 16 0 0 1 -16 -16 z" fill="#FFFFFF" fill-opacity="0.04"/>
+      <line x1="742" y1="396" x2="1194" y2="396" stroke="#FFFFFF" stroke-opacity="0.10"/>
+      <text class="t" x="770" y="424" font-size="13" fill="#A9B3C9">Actualizado a las 19:46</text>
+      <text class="t" x="1166" y="424" font-size="13" fill="#7FD3FF" text-anchor="end">Ajustes de Bluetooth</text>
+    </g>
+
+    <!-- ===================== Barra de tareas con los iconos ===================== -->
+    <g class="rise2">
+      <rect x="742" y="466" width="452" height="64" rx="14" fill="#151A27" fill-opacity="0.92" stroke="#FFFFFF" stroke-opacity="0.10"/>
+      <!-- Flecha ^ -->
+      <path d="M770 503 l7 -7 l7 7" fill="none" stroke="#DCE3F2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- Baterías de BatteryTray: borde blanco y relleno de color, como las de Windows -->
+      <g transform="translate(806 488)">
+        <rect x="1" y="1" width="36" height="18" rx="5.5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+        <rect x="38" y="6.5" width="2.2" height="7" rx="1" fill="#FFFFFF"/>
+        <rect class="bar d4" x="4" y="4" width="25" height="12" rx="1.5" fill="#60CDFF"/>
+      </g>
+      <g transform="translate(862 488)">
+        <rect x="1" y="1" width="36" height="18" rx="5.5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+        <rect x="38" y="6.5" width="2.2" height="7" rx="1" fill="#FFFFFF"/>
+        <rect class="bar d5" x="4" y="4" width="14" height="12" rx="1.5" fill="#C5A3FF"/>
+      </g>
+      <g transform="translate(918 488)">
+        <rect x="1" y="1" width="36" height="18" rx="5.5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+        <rect x="38" y="6.5" width="2.2" height="7" rx="1" fill="#FFFFFF"/>
+        <g class="bar d6"><rect class="charge" x="4" y="4" width="20" height="12" rx="1.5" fill="#FFAE57"/></g>
+        <!-- Rayo recortado (contorno del color de la barra) -->
+        <path class="pulse" d="M21 -5 L12 9 L18 9 L15.5 21 L25.5 6.5 L19.5 6.5 L22 -5 Z" fill="#FFFFFF" stroke="#151A27" stroke-width="2.6" stroke-linejoin="round" paint-order="stroke"/>
+      </g>
+
+      <!-- Wi-Fi, volumen y batería del portátil (iconos de sistema simplificados) -->
+      <g fill="none" stroke="#DCE3F2" stroke-width="2" stroke-linecap="round">
+        <path d="M993 495 a14 14 0 0 1 20 0 M997 500 a8 8 0 0 1 12 0"/>
+        <circle cx="1003" cy="505" r="1.6" fill="#DCE3F2" stroke="none"/>
+        <path d="M1028 494 h4 l6 -5 v22 l-6 -5 h-4 z" stroke-linejoin="round"/>
+        <path d="M1043 494 a8 8 0 0 1 0 12"/>
+      </g>
+      <text class="t" x="1170" y="494" font-size="13" fill="#E6ECFA" text-anchor="end">19:46</text>
+      <text class="t" x="1170" y="513" font-size="13" fill="#E6ECFA" text-anchor="end">10/11/2026</text>
+    </g>
+  </g>
+</svg>

@@ -112,6 +112,38 @@ public class RendererTests
     }
 
     [Fact]
+    public void WindowsBattery_WhiteOutlineAndDeviceColorFill()
+    {
+        // A 20 px la batería mide 19×10 como la de Windows: contorno en y=5, relleno de y=7 a y=12.
+        var spec = new TrayIconSpec(50, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.WindowsBattery, "blue");
+        using Bitmap bmp = TrayIconRenderer.RenderBitmap(spec, 20, lightTaskbar: false);
+
+        Assert.Equal(Color.White.ToArgb(), bmp.GetPixel(9, 5).ToArgb());   // contorno blanco, como Windows
+        Assert.Equal(0, bmp.GetPixel(9, 6).A);                            // hueco de 1 px
+        Assert.Equal(Color.FromArgb(255, 0x60, 0xCD, 0xFF).ToArgb(), bmp.GetPixel(3, 9).ToArgb()); // relleno azul
+        Assert.Equal(0, bmp.GetPixel(15, 9).A);                           // vacío a la derecha (50 %)
+    }
+
+    [Fact]
+    public void WindowsBattery_LowBatteryTurnsOutlineRed()
+    {
+        var spec = new TrayIconSpec(10, LevelBand.Critical, false, DeviceKind.Mouse, IconStyle.WindowsBattery, "blue");
+        using Bitmap bmp = TrayIconRenderer.RenderBitmap(spec, 20, lightTaskbar: false);
+
+        Assert.Equal(Color.FromArgb(255, 255, 153, 164).ToArgb(), bmp.GetPixel(9, 5).ToArgb()); // borde rojo
+        Assert.Equal(Color.FromArgb(255, 0x60, 0xCD, 0xFF).ToArgb(), bmp.GetPixel(2, 9).ToArgb()); // relleno sigue azul
+    }
+
+    [Fact]
+    public void WindowsBattery_ChargingUsesWindowsGreen()
+    {
+        var spec = new TrayIconSpec(90, LevelBand.Normal, true, DeviceKind.Mouse, IconStyle.WindowsBattery);
+        using Bitmap bmp = TrayIconRenderer.RenderBitmap(spec, 20, lightTaskbar: false);
+
+        Assert.Equal(Color.FromArgb(255, 0x9F, 0xD8, 0x9F).ToArgb(), bmp.GetPixel(3, 9).ToArgb());
+    }
+
+    [Fact]
     public void RenderHicon_ReturnsHandle()
     {
         var spec = new TrayIconSpec(null, LevelBand.Unknown, false, DeviceKind.Unknown, IconStyle.Percentage);

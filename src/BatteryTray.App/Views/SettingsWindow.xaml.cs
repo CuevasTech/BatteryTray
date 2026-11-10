@@ -75,6 +75,8 @@ public sealed partial class SettingsWindow : Window
         TrayModeCard.Description = Loc.Get("TrayModeDesc");
         IconStyleCard.Header = Loc.Get("IconStyleHeader");
         IconStyleCard.Description = Loc.Get("IconStyleDesc");
+        DeviceColorCard.Header = Loc.Get("DeviceColorHeader");
+        DeviceColorCard.Description = Loc.Get("DeviceColorDesc");
         PinCard.Header = Loc.Get("PinHeader");
         PinCard.Description = Loc.Get("PinDesc");
         PinButton.Content = Loc.Get("PinButton");
@@ -105,7 +107,7 @@ public sealed partial class SettingsWindow : Window
         SourceLink.Content = Loc.Get("AboutSource");
         SourceLink.NavigateUri = new Uri(AppInfo.RepositoryUrl);
 
-        foreach (ToggleSwitch toggle in new[] { StartupToggle, LowBatteryToggle, ConnectionToggle, DemoToggle })
+        foreach (ToggleSwitch toggle in new[] { StartupToggle, DeviceColorToggle, LowBatteryToggle, ConnectionToggle, DemoToggle })
         {
             toggle.OnContent = Loc.Get("On");
             toggle.OffContent = Loc.Get("Off");
@@ -118,6 +120,7 @@ public sealed partial class SettingsWindow : Window
         TrayModeCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("TrayModePerDevice"), Tag = TrayMode.PerDevice });
         TrayModeCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("TrayModeSingle"), Tag = TrayMode.Single });
 
+        IconStyleCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("IconStyleWindows"), Tag = IconStyle.WindowsBattery });
         IconStyleCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("IconStylePercentage"), Tag = IconStyle.Percentage });
         IconStyleCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("IconStyleDevice"), Tag = IconStyle.DeviceIcon });
     }
@@ -128,6 +131,7 @@ public sealed partial class SettingsWindow : Window
         SelectByTag(LanguageCombo, s.Language);
         SelectByTag(TrayModeCombo, s.TrayMode);
         SelectByTag(IconStyleCombo, s.IconStyle);
+        DeviceColorToggle.IsOn = s.ColorPerDevice;
         LowBatteryToggle.IsOn = s.NotifyLowBattery;
         ThresholdSlider.Value = s.LowBatteryThreshold;
         ThresholdValue.Text = Loc.Format("Percent", s.LowBatteryThreshold);
@@ -165,7 +169,7 @@ public sealed partial class SettingsWindow : Window
 
         // Si solo cambian los niveles, se actualiza el texto sin rehacer las tarjetas
         // (así no se cierra un menú que el usuario tenga abierto).
-        string signature = string.Join("|", devices.Select(d => $"{d.Id}:{s.DisplayName(d)}:{s.IsHidden(d.Id)}:{s.HasTrayIcon(d)}:{d.IsConnected}"));
+        string signature = string.Join("|", devices.Select(d => $"{d.Id}:{s.DisplayName(d)}:{s.IsHidden(d.Id)}:{s.HasTrayIcon(d)}:{d.IsConnected}:{s.DeviceColor(d)}"));
         if (signature == _deviceSignature)
         {
             foreach (BatteryDevice d in devices)
@@ -217,11 +221,17 @@ public sealed partial class SettingsWindow : Window
     private SettingsCard BuildDeviceCard(BatteryDevice d, AppSettings s)
     {
         string id = d.Id;
+        var headerIcon = new FontIcon { Glyph = DeviceGlyphs.For(d.Kind) };
+        if (DeviceItem.ColorBrush(s.DeviceColor(d)) is { } accent)
+        {
+            headerIcon.Foreground = accent; // el mismo color que su batería en la bandeja
+        }
+
         var card = new SettingsCard
         {
             Header = s.DisplayName(d),
             Description = DeviceDescription(d, s),
-            HeaderIcon = new FontIcon { Glyph = DeviceGlyphs.For(d.Kind) },
+            HeaderIcon = headerIcon,
         };
 
         var show = new ToggleMenuFlyoutItem { Text = Loc.Get("DeviceShow"), IsChecked = !s.IsHidden(id) };
@@ -248,9 +258,33 @@ public sealed partial class SettingsWindow : Window
         };
         forget.Click += (_, _) => _controller.Forget(id);
 
+        // Submenú de color: la paleta y "sin color" (igual que Windows).
+        var colorMenu = new MenuFlyoutSubItem { Text = Loc.Get("DeviceColor"), Icon = new FontIcon { Glyph = "" } };
+        string current = s.DeviceColors.TryGetValue(id, out string? key) ? key : DeviceColors.None;
+        foreach (string option in DeviceColors.Palette.Append(DeviceColors.None))
+        {
+            string choice = option;
+            var icon = new FontIcon { Glyph = choice == DeviceColors.None ? "" : "" };
+            if (DeviceItem.ColorBrush(choice) is { } brush)
+            {
+                icon.Foreground = brush;
+            }
+
+            var item = new RadioMenuFlyoutItem
+            {
+                Text = Loc.Get("Color_" + choice),
+                GroupName = "color-" + id,
+                IsChecked = choice == current,
+                Icon = icon,
+            };
+            item.Click += (_, _) => _controller.UpdateSettings(x => x.DeviceColors[id] = choice);
+            colorMenu.Items.Add(item);
+        }
+
         var menu = new MenuFlyout();
         menu.Items.Add(show);
         menu.Items.Add(tray);
+        menu.Items.Add(colorMenu);
         menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(rename);
         menu.Items.Add(forget);
@@ -349,6 +383,14 @@ public sealed partial class SettingsWindow : Window
         if (!_loading && IconStyleCombo.SelectedItem is ComboBoxItem { Tag: IconStyle style })
         {
             _controller.UpdateSettings(s => s.IconStyle = style);
+        }
+    }
+
+    private void DeviceColorToggle_Toggled(object sender, RoutedEventArgs e)
+    {
+        if (!_loading)
+        {
+            _controller.UpdateSettings(s => s.ColorPerDevice = DeviceColorToggle.IsOn);
         }
     }
 

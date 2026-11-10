@@ -10,6 +10,8 @@
     <PackageVersion Include="Microsoft.Windows.AI.MachineLearning" Version="2.4.89" />
     <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.251219" />
     <PackageVersion Include="System.Drawing.Common" Version="10.0.15" />
+    <!-- Solo para las herramientas de tools/ (generar iconos e imágenes); no va en la app. -->
+    <PackageVersion Include="Svg.Skia" Version="5.2.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
     <PackageVersion Include="xunit.v3" Version="4.0.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />

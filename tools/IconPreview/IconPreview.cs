@@ -2,7 +2,7 @@
 #:property PublishAot=false
 #:project ../../src/BatteryTray.Windows/BatteryTray.Windows.csproj
 
-// Genera una tira de muestra de los iconos de bandeja para revisarlos a ojo.
+// Genera tiras de muestra de los iconos de bandeja para revisarlos a ojo.
 // Uso: dotnet run tools/IconPreview/IconPreview.cs -- <carpeta-salida>
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -15,30 +15,32 @@ Directory.CreateDirectory(outDir);
 
 TrayIconSpec[] specs =
 [
-    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.Percentage),
-    new(100, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.Percentage),
-    new(30, LevelBand.Warning, false, DeviceKind.Keyboard, IconStyle.Percentage),
-    new(9, LevelBand.Critical, false, DeviceKind.Mouse, IconStyle.Percentage),
-    new(64, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.Percentage),
-    new(null, LevelBand.Unknown, false, DeviceKind.Unknown, IconStyle.Percentage),
-    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.DeviceIcon),
-    new(18, LevelBand.Critical, false, DeviceKind.Mouse, IconStyle.DeviceIcon),
-    new(64, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.DeviceIcon),
-    new(57, LevelBand.Normal, false, DeviceKind.Keyboard, IconStyle.DeviceIcon),
-    new(40, LevelBand.Normal, false, DeviceKind.Pen, IconStyle.DeviceIcon),
-    new(70, LevelBand.Normal, false, DeviceKind.Computer, IconStyle.DeviceIcon),
+    // Estilo batería de Windows: blanca (igual que Windows) y con contorno de color.
+    new(98, LevelBand.Normal, false, DeviceKind.Computer, IconStyle.WindowsBattery, null),
+    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.WindowsBattery, "blue"),
+    new(55, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.WindowsBattery, "purple"),
+    new(64, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.WindowsBattery, "orange"),
+    new(12, LevelBand.Critical, false, DeviceKind.Keyboard, IconStyle.WindowsBattery, "pink"),
+    new(35, LevelBand.Warning, false, DeviceKind.Pen, IconStyle.WindowsBattery, "teal"),
+    new(100, LevelBand.Normal, false, DeviceKind.Speaker, IconStyle.WindowsBattery, "indigo"),
+    // Porcentaje e icono del dispositivo, con batería pequeña.
+    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.Percentage, "blue"),
+    new(12, LevelBand.Critical, false, DeviceKind.Keyboard, IconStyle.Percentage, "pink"),
+    new(64, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.Percentage, "orange"),
+    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.DeviceIcon, "blue"),
+    new(55, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.DeviceIcon, "purple"),
 ];
 
 foreach (int size in new[] { 16, 20, 24, 32 })
 {
     foreach (bool light in new[] { false, true })
     {
-        const int pad = 8;
-        const int zoom = 4;
+        int pad = 8;
+        int zoom = size <= 20 ? 6 : 4;
         int cell = size * zoom + pad;
         using var strip = new Bitmap(cell * specs.Length + pad, cell + pad);
         using Graphics g = Graphics.FromImage(strip);
-        g.Clear(light ? Color.FromArgb(243, 243, 243) : Color.FromArgb(32, 32, 32));
+        g.Clear(light ? Color.FromArgb(238, 238, 238) : Color.FromArgb(32, 28, 28));
         g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
         g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
         for (int i = 0; i < specs.Length; i++)
@@ -51,4 +53,18 @@ foreach (int size in new[] { 16, 20, 24, 32 })
         strip.Save(file, ImageFormat.Png);
         Console.WriteLine(file);
     }
+}
+
+// Tamaño real (sin ampliar), como se ve en la barra.
+using (var real = new Bitmap(specs.Length * 28 + 8, 40))
+using (Graphics g = Graphics.FromImage(real))
+{
+    g.Clear(Color.FromArgb(32, 28, 28));
+    for (int i = 0; i < specs.Length; i++)
+    {
+        using Bitmap icon = TrayIconRenderer.RenderBitmap(specs[i], 16, false);
+        g.DrawImageUnscaled(icon, 8 + i * 28, 12);
+    }
+
+    real.Save(Path.Combine(outDir, "tray-real-16.png"), ImageFormat.Png);
 }

@@ -57,7 +57,8 @@
                                 </Grid.RowDefinitions>
 
                                 <Border Grid.RowSpan="3" Width="36" Height="36" VerticalAlignment="Center"
-                                        Background="{ThemeResource SubtleFillColorSecondaryBrush}" CornerRadius="18">
+                                        Background="{ThemeResource SubtleFillColorSecondaryBrush}" CornerRadius="18"
+                                        BorderBrush="{x:Bind AccentBrush}" BorderThickness="{x:Bind AccentThickness}">
                                     <FontIcon FontSize="18" Foreground="{x:Bind IconBrush}" Glyph="{x:Bind Glyph}" />
                                 </Border>
 

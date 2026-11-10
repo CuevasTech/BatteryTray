@@ -59,9 +59,15 @@
                 </tk:SettingsCard>
                 <tk:SettingsCard x:Name="IconStyleCard">
                     <tk:SettingsCard.HeaderIcon>
-                        <FontIcon Glyph="&#xE790;" />
+                        <FontIcon Glyph="&#xE83F;" />
                     </tk:SettingsCard.HeaderIcon>
                     <ComboBox x:Name="IconStyleCombo" MinWidth="200" SelectionChanged="IconStyleCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <tk:SettingsCard x:Name="DeviceColorCard">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE790;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="DeviceColorToggle" Toggled="DeviceColorToggle_Toggled" />
                 </tk:SettingsCard>
                 <tk:SettingsCard x:Name="PinCard">
                     <tk:SettingsCard.HeaderIcon>

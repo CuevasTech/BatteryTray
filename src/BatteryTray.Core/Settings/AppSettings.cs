@@ -13,10 +13,13 @@ public enum TrayMode
 /// <summary>Qué se dibuja en cada icono.</summary>
 public enum IconStyle
 {
-    /// <summary>El porcentaje en número.</summary>
+    /// <summary>Una batería igual que la de Windows 11 (con el relleno del color del dispositivo).</summary>
+    WindowsBattery,
+
+    /// <summary>El porcentaje en número, con una batería pequeña debajo.</summary>
     Percentage,
 
-    /// <summary>El icono del tipo de dispositivo con una barra de nivel.</summary>
+    /// <summary>El icono del tipo de dispositivo, con una batería pequeña debajo.</summary>
     DeviceIcon,
 }
 
@@ -35,7 +38,13 @@ public sealed class AppSettings
 
     public TrayMode TrayMode { get; set; } = TrayMode.PerDevice;
 
-    public IconStyle IconStyle { get; set; } = IconStyle.Percentage;
+    public IconStyle IconStyle { get; set; } = IconStyle.WindowsBattery;
+
+    /// <summary>Relleno de un color por dispositivo para distinguirlos (si no, igual que Windows).</summary>
+    public bool ColorPerDevice { get; set; } = true;
+
+    /// <summary>Color de cada dispositivo (clave de <see cref="Core.DeviceColors.Palette"/> o "none").</summary>
+    public Dictionary<string, string> DeviceColors { get; set; } = [];
 
     public bool NotifyLowBattery { get; set; } = true;
 
@@ -69,6 +78,34 @@ public sealed class AppSettings
     public string DisplayName(BatteryDevice device) =>
         Aliases.TryGetValue(device.Id, out string? alias) && !string.IsNullOrWhiteSpace(alias) ? alias : device.Name;
 
+    /// <summary>Color con el que se dibuja el dispositivo, o null para el color normal de Windows.</summary>
+    public string? DeviceColor(BatteryDevice device) =>
+        ColorPerDevice && DeviceColors.TryGetValue(device.Id, out string? key) && key != Core.DeviceColors.None ? key : null;
+
+    /// <summary>
+    /// Da un color a los dispositivos que aún no tienen (el primero libre de la paleta).
+    /// Devuelve true si ha cambiado algo (hay que guardar los ajustes).
+    /// </summary>
+    public bool AssignMissingColors(IEnumerable<BatteryDevice> devices)
+    {
+        bool changed = false;
+        foreach (BatteryDevice d in devices)
+        {
+            if (DeviceColors.ContainsKey(d.Id) || !IsValidDeviceId(d.Id) || DeviceColors.Count >= MaxListEntries)
+            {
+                continue;
+            }
+
+            // La batería del propio equipo se deja como la de Windows.
+            DeviceColors[d.Id] = d.Kind == DeviceKind.Computer
+                ? Core.DeviceColors.None
+                : Core.DeviceColors.NextFree(DeviceColors.Values.Where(v => v != Core.DeviceColors.None));
+            changed = true;
+        }
+
+        return changed;
+    }
+
     /// <summary>
     /// Valida y corrige valores tras leerlos del disco. El archivo de ajustes lo puede
     /// editar cualquiera a mano, así que se trata como entrada no confiable: rangos
@@ -90,8 +127,13 @@ public sealed class AppSettings
 
         if (!Enum.IsDefined(IconStyle))
         {
-            IconStyle = IconStyle.Percentage;
+            IconStyle = IconStyle.WindowsBattery;
         }
+
+        DeviceColors = (DeviceColors ?? [])
+            .Where(kv => IsValidDeviceId(kv.Key) && Core.DeviceColors.IsValid(kv.Value))
+            .Take(MaxListEntries)
+            .ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
 
         LowBatteryThreshold = Math.Clamp(LowBatteryThreshold, MinThreshold, MaxThreshold);
 

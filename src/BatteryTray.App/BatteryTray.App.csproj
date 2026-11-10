@@ -31,6 +31,24 @@
     <SelfContained>true</SelfContained>
   </PropertyGroup>
 
+  <!--
+    Paquete para la Microsoft Store: .NET va dentro del paquete y Windows App SDK se instala
+    desde la Store como dependencia. Sin firmar (la Store firma el paquete al publicarlo) y sin
+    símbolos de depuración. Se genera con:
+      dotnet publish src/BatteryTray.App -c Release -r win-x64 -p:Platform=x64 -p:Packaged=true
+  -->
+  <PropertyGroup Condition="'$(Packaged)' == 'true'">
+    <SelfContained>true</SelfContained>
+    <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <AppxSymbolPackageEnabled>false</AppxSymbolPackageEnabled>
+    <AppxBundle>Never</AppxBundle>
+    <UapAppxPackageBuildMode>SideloadOnly</UapAppxPackageBuildMode>
+    <GenerateAppInstallerFile>false</GenerateAppInstallerFile>
+    <GenerateTestArtifacts>false</GenerateTestArtifacts>
+    <AppxPackageDir>$(MSBuildThisFileDirectory)..\..\artifacts\store\</AppxPackageDir>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <PublishReadyToRun>true</PublishReadyToRun>
     <!-- Quita el código de .NET y de Windows que la app no usa (reduce mucho el tamaño). -->

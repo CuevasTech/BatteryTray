@@ -109,4 +109,15 @@
   <data name="KindWatch" xml:space="preserve"><value>Reloj</value></data>
   <data name="KindUnknown" xml:space="preserve"><value>Dispositivo</value></data>
   <data name="ThresholdHeader" xml:space="preserve"><value>Nivel de aviso</value></data>
+  <data name="IconStyleWindows" xml:space="preserve"><value>Batería (como Windows)</value></data>
+  <data name="DeviceColor" xml:space="preserve"><value>Color</value></data>
+  <data name="Color_blue" xml:space="preserve"><value>Azul</value></data>
+  <data name="Color_purple" xml:space="preserve"><value>Morado</value></data>
+  <data name="Color_orange" xml:space="preserve"><value>Naranja</value></data>
+  <data name="Color_pink" xml:space="preserve"><value>Rosa</value></data>
+  <data name="Color_teal" xml:space="preserve"><value>Turquesa</value></data>
+  <data name="Color_indigo" xml:space="preserve"><value>Índigo</value></data>
+  <data name="Color_none" xml:space="preserve"><value>Sin color (como Windows)</value></data>
+  <data name="DeviceColorHeader" xml:space="preserve"><value>Un color para cada dispositivo</value></data>
+  <data name="DeviceColorDesc" xml:space="preserve"><value>El interior de cada batería lleva su color para distinguirlas. Desactívalo para que sean iguales que la de Windows.</value></data>
 </root>

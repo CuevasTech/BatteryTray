@@ -87,7 +87,7 @@ internal sealed class TrayController : IDisposable
     }
 
     private static TrayIconSpec Spec(BatteryDevice d, AppSettings s) =>
-        new(d.Level, d.GetBand(s.LowBatteryThreshold), d.IsCharging, d.Kind, s.IconStyle);
+        new(d.Level, d.GetBand(s.LowBatteryThreshold), d.IsCharging, d.Kind, s.IconStyle, s.DeviceColor(d));
 
     private static string Tooltip(BatteryDevice d, AppSettings s)
     {

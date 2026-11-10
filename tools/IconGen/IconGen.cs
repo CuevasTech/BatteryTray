@@ -1,28 +1,64 @@
-#:property TargetFramework=net10.0-windows
+#:property TargetFramework=net10.0
 #:property PublishAot=false
-#:package System.Drawing.Common
+#:package Svg.Skia
 
-// Genera el icono de la app (.ico) y las imágenes que pide el paquete MSIX.
-// Uso: dotnet run tools/IconGen/IconGen.cs -- <carpeta Assets>
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+// Genera el icono de la app (.ico) y las imágenes del paquete MSIX a partir de los SVG
+// de docs/brand. Uso:
+//   dotnet run tools/IconGen/IconGen.cs -- assets <carpeta Assets>
+//   dotnet run tools/IconGen/IconGen.cs -- preview <archivo.png>
+using SkiaSharp;
+using Svg.Skia;
 
-string outDir = args.Length > 0 ? args[0] : "Assets";
+string root = FindRepoRoot();
+string mode = args.Length > 0 ? args[0] : "assets";
+using SKPicture big = LoadSvg(Path.Combine(root, "docs", "brand", "logo.svg"));
+using SKPicture small = LoadSvg(Path.Combine(root, "docs", "brand", "logo-small.svg"));
+
+// Por debajo de 48 px se usa la versión simplificada (se lee mejor).
+SKPicture For(int size) => size < 48 ? small : big;
+
+if (mode == "preview")
+{
+    string output = args.Length > 1 ? args[1] : "preview.png";
+    int[] sizes = [256, 128, 64, 48, 32, 24, 16];
+    int width = sizes.Sum() + (sizes.Length + 1) * 16;
+    using var sheet = new SKBitmap(width, 2 * (256 + 32));
+    using (var canvas = new SKCanvas(sheet))
+    {
+        canvas.Clear(new SKColor(32, 32, 32));
+        using var light = new SKPaint { Color = new SKColor(243, 243, 243) };
+        canvas.DrawRect(0, 256 + 32, width, 256 + 32, light);
+        for (int row = 0; row < 2; row++)
+        {
+            int x = 16;
+            foreach (int s in sizes)
+            {
+                using SKBitmap icon = Render(For(s), s, s, 1f);
+                canvas.DrawBitmap(icon, x, row * (256 + 32) + 16 + (256 - s) / 2);
+                x += s + 16;
+            }
+        }
+    }
+
+    Save(sheet, output);
+    Console.WriteLine(output);
+    return;
+}
+
+string outDir = args.Length > 1 ? args[1] : "Assets";
 Directory.CreateDirectory(outDir);
 
-// Imágenes cuadradas con el logo ocupando casi todo.
-SaveSquare("Square44x44Logo.scale-200.png", 88, 0.92f);
-SaveSquare("Square44x44Logo.targetsize-16_altform-unplated.png", 16, 1f);
-SaveSquare("Square44x44Logo.targetsize-24_altform-unplated.png", 24, 1f);
-SaveSquare("Square44x44Logo.targetsize-32_altform-unplated.png", 32, 1f);
-SaveSquare("Square44x44Logo.targetsize-48_altform-unplated.png", 48, 1f);
-SaveSquare("Square44x44Logo.targetsize-256_altform-unplated.png", 256, 1f);
-SaveSquare("Square150x150Logo.scale-200.png", 300, 0.6f);
-SaveSquare("StoreLogo.png", 50, 0.92f);
-SaveSquare("LockScreenLogo.scale-200.png", 48, 0.92f);
-SaveRect("Wide310x150Logo.scale-200.png", 620, 300, 0.6f);
-SaveRect("SplashScreen.scale-200.png", 1240, 600, 0.4f);
+SaveSquare("Square44x44Logo.scale-200.png", 88, 1f);
+foreach (int s in new[] { 16, 24, 32, 48, 256 })
+{
+    SaveSquare($"Square44x44Logo.targetsize-{s}_altform-unplated.png", s, 1f);
+}
+
+SaveSquare("Square150x150Logo.scale-200.png", 300, 0.66f);
+SaveSquare("StoreLogo.png", 50, 1f);
+SaveSquare("LockScreenLogo.scale-200.png", 48, 1f);
+SaveRect("Wide310x150Logo.scale-200.png", 620, 300, 0.62f);
+SaveRect("SplashScreen.scale-200.png", 1240, 600, 0.42f);
 SaveIco("AppIcon.ico", [16, 20, 24, 32, 40, 48, 64, 256]);
 Console.WriteLine($"Listo: {Path.GetFullPath(outDir)}");
 
@@ -30,19 +66,18 @@ void SaveSquare(string name, int size, float fill) => SaveRect(name, size, size,
 
 void SaveRect(string name, int w, int h, float fill)
 {
-    using Bitmap bmp = Render(w, h, fill);
-    bmp.Save(Path.Combine(outDir, name), ImageFormat.Png);
+    using SKBitmap bmp = Render(For((int)(Math.Min(w, h) * fill)), w, h, fill);
+    Save(bmp, Path.Combine(outDir, name));
 }
 
 void SaveIco(string name, int[] sizes)
 {
-    // Formato ICO con cada tamaño guardado como PNG (admitido desde Windows Vista).
+    // ICO con cada tamaño guardado como PNG (admitido desde Windows Vista).
     var pngs = sizes.Select(s =>
     {
-        using Bitmap bmp = Render(s, s, 1f);
-        using var ms = new MemoryStream();
-        bmp.Save(ms, ImageFormat.Png);
-        return ms.ToArray();
+        using SKBitmap bmp = Render(For(s), s, s, 1f);
+        using SKData data = bmp.Encode(SKEncodedImageFormat.Png, 100);
+        return data.ToArray();
     }).ToList();
 
     using var fs = File.Create(Path.Combine(outDir, name));
@@ -53,8 +88,9 @@ void SaveIco(string name, int[] sizes)
     int offset = 6 + 16 * sizes.Length;
     for (int i = 0; i < sizes.Length; i++)
     {
-        bw.Write((byte)(sizes[i] >= 256 ? 0 : sizes[i]));
-        bw.Write((byte)(sizes[i] >= 256 ? 0 : sizes[i]));
+        byte dim = (byte)(sizes[i] >= 256 ? 0 : sizes[i]);
+        bw.Write(dim);
+        bw.Write(dim);
         bw.Write((byte)0);
         bw.Write((byte)0);
         bw.Write((ushort)1);
@@ -70,75 +106,39 @@ void SaveIco(string name, int[] sizes)
     }
 }
 
-static Bitmap Render(int w, int h, float fill)
+static SKPicture LoadSvg(string path)
 {
-    var bmp = new Bitmap(w, h, PixelFormat.Format32bppArgb);
-    using Graphics g = Graphics.FromImage(bmp);
-    g.Clear(Color.Transparent);
-    g.SmoothingMode = SmoothingMode.AntiAlias;
-    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+    var svg = new SKSvg();
+    return svg.Load(path) ?? throw new InvalidOperationException($"No se pudo cargar {path}");
+}
 
+static SKBitmap Render(SKPicture picture, int w, int h, float fill)
+{
+    var bmp = new SKBitmap(new SKImageInfo(w, h, SKColorType.Bgra8888, SKAlphaType.Premul));
+    using var canvas = new SKCanvas(bmp);
+    canvas.Clear(SKColors.Transparent);
+    SKRect bounds = picture.CullRect;
     float box = Math.Min(w, h) * fill;
-    float ox = (w - box) / 2f;
-    float oy = (h - box) / 2f;
-
-    // Cuerpo de la batería (horizontal) y su borne.
-    float bodyW = box * 0.80f;
-    float bodyH = box * 0.52f;
-    float nubW = box * 0.08f;
-    float nubH = bodyH * 0.40f;
-    float gapNub = box * 0.02f;
-    float totalW = bodyW + gapNub + nubW;
-    float bx = ox + (box - totalW) / 2f;
-    float by = oy + (box - bodyH) / 2f;
-    float radius = bodyH * 0.24f;
-
-    var body = new RectangleF(bx, by, bodyW, bodyH);
-    using (var grad = new LinearGradientBrush(body, Color.FromArgb(255, 0, 103, 192), Color.FromArgb(255, 0, 178, 202), LinearGradientMode.ForwardDiagonal))
-    using (GraphicsPath bodyPath = RoundedRect(body, radius))
-    {
-        g.FillPath(grad, bodyPath);
-    }
-
-    var nub = new RectangleF(bx + bodyW + gapNub, by + (bodyH - nubH) / 2f, nubW, nubH);
-    using (var nubBrush = new SolidBrush(Color.FromArgb(255, 0, 178, 202)))
-    using (GraphicsPath nubPath = RoundedRect(nub, nubW * 0.45f))
-    {
-        g.FillPath(nubBrush, nubPath);
-    }
-
-    // Tres barras de nivel; la última más tenue (batería "casi llena").
-    float pad = bodyH * 0.18f;
-    float inner = bodyW - pad * 2;
-    float barGap = inner * 0.08f;
-    float barW = (inner - barGap * 2) / 3f;
-    float barH = bodyH - pad * 2;
-    for (int i = 0; i < 3; i++)
-    {
-        int alpha = i == 2 ? 120 : 245;
-        var bar = new RectangleF(bx + pad + i * (barW + barGap), by + pad, barW, barH);
-        using var barBrush = new SolidBrush(Color.FromArgb(alpha, 255, 255, 255));
-        using GraphicsPath barPath = RoundedRect(bar, Math.Min(barW, barH) * 0.22f);
-        g.FillPath(barBrush, barPath);
-    }
-
+    float scale = box / Math.Max(bounds.Width, bounds.Height);
+    canvas.Translate((w - bounds.Width * scale) / 2f, (h - bounds.Height * scale) / 2f);
+    canvas.Scale(scale);
+    canvas.DrawPicture(picture);
     return bmp;
 }
 
-static GraphicsPath RoundedRect(RectangleF r, float radius)
+static void Save(SKBitmap bmp, string path)
 {
-    var path = new GraphicsPath();
-    float d = Math.Min(radius * 2, Math.Min(r.Width, r.Height));
-    if (d < 1f)
+    using SKData data = bmp.Encode(SKEncodedImageFormat.Png, 100);
+    File.WriteAllBytes(path, data.ToArray());
+}
+
+static string FindRepoRoot()
+{
+    string? dir = Directory.GetCurrentDirectory();
+    while (dir is not null && !File.Exists(Path.Combine(dir, "BatteryTray.slnx")))
     {
-        path.AddRectangle(r);
-        return path;
+        dir = Path.GetDirectoryName(dir);
     }
 
-    path.AddArc(r.X, r.Y, d, d, 180, 90);
-    path.AddArc(r.Right - d, r.Y, d, d, 270, 90);
-    path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
-    path.AddArc(r.X, r.Bottom - d, d, d, 90, 90);
-    path.CloseFigure();
-    return path;
+    return dir ?? throw new InvalidOperationException("Ejecuta la herramienta desde dentro del repositorio.");
 }
