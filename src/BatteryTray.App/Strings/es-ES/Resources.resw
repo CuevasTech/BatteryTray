@@ -53,6 +53,12 @@
   <data name="RestartTitle" xml:space="preserve"><value>Reinicia la app para cambiar el idioma</value></data>
   <data name="RestartNow" xml:space="preserve"><value>Reiniciar ahora</value></data>
   <data name="SectionTaskbar" xml:space="preserve"><value>Barra de tareas</value></data>
+  <data name="PlacementHeader" xml:space="preserve"><value>Dónde se muestran</value></data>
+  <data name="PlacementDesc" xml:space="preserve"><value>Como iconos junto al reloj o como una barra dentro de la barra de tareas</value></data>
+  <data name="PlacementTray" xml:space="preserve"><value>Iconos junto al reloj</value></data>
+  <data name="PlacementTaskbar" xml:space="preserve"><value>Barra en la barra de tareas</value></data>
+  <data name="BarUnavailable" xml:space="preserve"><value>Ahora no cabe en la barra de tareas (o está en vertical), así que se muestran los iconos junto al reloj.</value></data>
+  <data name="TrayOnlySetting" xml:space="preserve"><value>Solo para los iconos junto al reloj</value></data>
   <data name="TrayModeHeader" xml:space="preserve"><value>Iconos</value></data>
   <data name="TrayModeDesc" xml:space="preserve"><value>Cuántos iconos se muestran junto al reloj</value></data>
   <data name="TrayModePerDevice" xml:space="preserve"><value>Uno por dispositivo</value></data>
@@ -73,7 +79,7 @@
   <data name="DevicesDesc" xml:space="preserve"><value>Dispositivos que han informado de su batería alguna vez</value></data>
   <data name="DevicesEmpty" xml:space="preserve"><value>Aún no se ha detectado ningún dispositivo con batería.</value></data>
   <data name="DeviceShow" xml:space="preserve"><value>Mostrar en la app</value></data>
-  <data name="DeviceTrayIcon" xml:space="preserve"><value>Icono propio en la barra</value></data>
+  <data name="DeviceTrayIcon" xml:space="preserve"><value>Mostrar en la barra de tareas</value></data>
   <data name="DeviceRename" xml:space="preserve"><value>Cambiar nombre…</value></data>
   <data name="DeviceForget" xml:space="preserve"><value>Olvidar</value></data>
   <data name="DeviceOptions" xml:space="preserve"><value>Opciones</value></data>

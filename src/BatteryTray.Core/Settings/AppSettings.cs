@@ -10,6 +10,16 @@ public enum TrayMode
     Single,
 }
 
+/// <summary>Dónde se muestran las baterías.</summary>
+public enum DisplayPlacement
+{
+    /// <summary>Iconos en el área de notificación, junto al reloj.</summary>
+    NotificationArea,
+
+    /// <summary>Una barra dentro de la propia barra de tareas, a la izquierda del reloj.</summary>
+    Taskbar,
+}
+
 /// <summary>Qué se dibuja en cada icono.</summary>
 public enum IconStyle
 {
@@ -35,6 +45,8 @@ public sealed class AppSettings
 
     /// <summary>"auto", "es" o "en".</summary>
     public string Language { get; set; } = "auto";
+
+    public DisplayPlacement Placement { get; set; } = DisplayPlacement.NotificationArea;
 
     public TrayMode TrayMode { get; set; } = TrayMode.PerDevice;
 
@@ -118,6 +130,11 @@ public sealed class AppSettings
         if (!SupportedLanguages.Contains(Language, StringComparer.Ordinal))
         {
             Language = "auto";
+        }
+
+        if (!Enum.IsDefined(Placement))
+        {
+            Placement = DisplayPlacement.NotificationArea;
         }
 
         if (!Enum.IsDefined(TrayMode))

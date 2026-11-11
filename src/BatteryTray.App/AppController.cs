@@ -38,6 +38,7 @@ internal sealed class AppController
     private readonly ConnectionChangeTracker _connections = new();
     private TrayIconHost? _host;
     private TrayController? _tray;
+    private TaskbarBarHost? _bar;
     private FlyoutWindow? _flyout;
     private SettingsWindow? _settingsWindow;
     private BatteryMonitor? _monitor;
@@ -62,6 +63,12 @@ internal sealed class AppController
     /// <summary>La lista de dispositivos cambió (en el hilo de la interfaz).</summary>
     public event Action? DevicesChanged;
 
+    /// <summary>La barra se puso o se quitó de la barra de tareas.</summary>
+    public event Action? TaskbarBarChanged;
+
+    /// <summary>True si se eligió la barra en la barra de tareas y está puesta.</summary>
+    public bool TaskbarBarActive => _bar?.IsAvailable == true;
+
     public async Task StartAsync()
     {
         var log = new FileLog(AppInfo.LogDirectory);
@@ -79,8 +86,9 @@ internal sealed class AppController
         _host = new TrayIconHost();
         _host.Activated += OnTrayActivated;
         _host.ContextMenuRequested += OnTrayContextMenu;
-        _host.EnvironmentChanged += () => _tray?.Update(Devices, Settings, force: true);
+        _host.EnvironmentChanged += OnEnvironmentChanged;
         _tray = new TrayController(_host);
+        ApplyPlacement();
         _tray.Update([], Settings);
 
         _flyout = new FlyoutWindow(this);
@@ -178,6 +186,7 @@ internal sealed class AppController
         }
 
         IReadOnlyList<BatteryDevice> devices = Devices;
+        ApplyPlacement();
 
         // Cada dispositivo nuevo recibe un color propio (y se guarda para que no cambie).
         if (Settings.AssignMissingColors(devices))
@@ -189,6 +198,57 @@ internal sealed class AppController
         _flyout?.UpdateDevices(devices);
         DevicesChanged?.Invoke();
         EvaluateNotifications(devices);
+    }
+
+    /// <summary>Pone o quita la barra de la barra de tareas según el ajuste.</summary>
+    private void ApplyPlacement()
+    {
+        bool wanted = Settings.Placement == DisplayPlacement.Taskbar;
+        if (wanted && _bar is null)
+        {
+            try
+            {
+                var bar = new TaskbarBarHost(_dispatcher);
+                bar.Clicked += (key, x, y) => OnTrayActivated(key, x, y, fromKeyboard: false);
+                bar.ContextMenuRequested += OnTrayContextMenu;
+                bar.AvailabilityChanged += OnTaskbarBarAvailabilityChanged;
+                _bar = bar;
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("No se pudo crear la barra en la barra de tareas", ex);
+            }
+        }
+        else if (!wanted && _bar is not null)
+        {
+            _bar.Dispose();
+            _bar = null;
+        }
+
+        if (_tray is not null && !ReferenceEquals(_tray.Bar, _bar))
+        {
+            _tray.Bar = _bar;
+            TaskbarBarChanged?.Invoke();
+        }
+    }
+
+    private void OnTaskbarBarAvailabilityChanged()
+    {
+        if (_exiting)
+        {
+            return;
+        }
+
+        // Se pasa de la barra a los iconos (o al revés).
+        _tray?.Update(Devices, Settings, force: true);
+        TaskbarBarChanged?.Invoke();
+    }
+
+    private void OnEnvironmentChanged()
+    {
+        // Tema, pantalla o Explorador reiniciado: se vuelve a dibujar todo.
+        _bar?.Reattach();
+        _tray?.Update(Devices, Settings, force: true);
     }
 
     private void EvaluateNotifications(IReadOnlyList<BatteryDevice> devices)
@@ -285,7 +345,7 @@ internal sealed class AppController
         var sb = new StringBuilder();
         sb.AppendLine(CultureInfo.InvariantCulture, $"# BatteryTray {AppInfo.Version} ({(AppInfo.IsPackaged ? "Store" : "portable")})");
         sb.AppendLine(CultureInfo.InvariantCulture, $"Windows {Environment.OSVersion.Version} | {System.Runtime.InteropServices.RuntimeInformation.OSArchitecture} | idioma {CultureInfo.CurrentUICulture.Name} → {Loc.LanguageTag}");
-        sb.AppendLine(CultureInfo.InvariantCulture, $"Ajustes: iconos={Settings.TrayMode}, estilo={Settings.IconStyle}, aviso={Settings.NotifyLowBattery} ({Settings.LowBatteryThreshold}%), demo={Settings.DemoMode}, ocultos={Settings.HiddenDevices.Count}");
+        sb.AppendLine(CultureInfo.InvariantCulture, $"Ajustes: lugar={Settings.Placement} (barra puesta: {TaskbarBarActive}), iconos={Settings.TrayMode}, estilo={Settings.IconStyle}, aviso={Settings.NotifyLowBattery} ({Settings.LowBatteryThreshold}%), demo={Settings.DemoMode}, ocultos={Settings.HiddenDevices.Count}");
         sb.AppendLine(CultureInfo.InvariantCulture, $"Inicio con Windows: {await _startup.GetStateAsync()}");
         sb.AppendLine();
         if (_monitor is not null)
@@ -445,6 +505,8 @@ internal sealed class AppController
             await _monitor.DisposeAsync();
         }
 
+        _bar?.Dispose();
+        _bar = null;
         _tray?.Dispose();
         _host?.Dispose();
         _notifications.Dispose();

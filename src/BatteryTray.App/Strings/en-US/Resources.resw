@@ -53,6 +53,12 @@
   <data name="RestartTitle" xml:space="preserve"><value>Restart the app to change the language</value></data>
   <data name="RestartNow" xml:space="preserve"><value>Restart now</value></data>
   <data name="SectionTaskbar" xml:space="preserve"><value>Taskbar</value></data>
+  <data name="PlacementHeader" xml:space="preserve"><value>Where they appear</value></data>
+  <data name="PlacementDesc" xml:space="preserve"><value>As icons next to the clock, or as a bar inside the taskbar</value></data>
+  <data name="PlacementTray" xml:space="preserve"><value>Icons next to the clock</value></data>
+  <data name="PlacementTaskbar" xml:space="preserve"><value>Bar on the taskbar</value></data>
+  <data name="BarUnavailable" xml:space="preserve"><value>It doesn’t fit on the taskbar right now (or the taskbar is vertical), so the icons next to the clock are shown instead.</value></data>
+  <data name="TrayOnlySetting" xml:space="preserve"><value>Only for the icons next to the clock</value></data>
   <data name="TrayModeHeader" xml:space="preserve"><value>Icons</value></data>
   <data name="TrayModeDesc" xml:space="preserve"><value>How many icons appear next to the clock</value></data>
   <data name="TrayModePerDevice" xml:space="preserve"><value>One per device</value></data>
@@ -73,7 +79,7 @@
   <data name="DevicesDesc" xml:space="preserve"><value>Devices that have reported their battery level</value></data>
   <data name="DevicesEmpty" xml:space="preserve"><value>No battery devices detected yet.</value></data>
   <data name="DeviceShow" xml:space="preserve"><value>Show in the app</value></data>
-  <data name="DeviceTrayIcon" xml:space="preserve"><value>Own taskbar icon</value></data>
+  <data name="DeviceTrayIcon" xml:space="preserve"><value>Show on the taskbar</value></data>
   <data name="DeviceRename" xml:space="preserve"><value>Rename…</value></data>
   <data name="DeviceForget" xml:space="preserve"><value>Forget</value></data>
   <data name="DeviceOptions" xml:space="preserve"><value>Options</value></data>

@@ -7,17 +7,25 @@ using BatteryTray.Windows.Rendering;
 
 namespace BatteryTray.Tray;
 
-/// <summary>Decide qué iconos mostrar en la bandeja y los dibuja.</summary>
+/// <summary>
+/// Decide qué mostrar y dónde: iconos en el área de notificación o, si el usuario lo
+/// eligió y cabe, la barra dentro de la barra de tareas.
+/// </summary>
 internal sealed class TrayController : IDisposable
 {
     public const string MainKey = "main";
     private const string DevicePrefix = "dev:";
     private const int MaxTooltip = 127;
 
+    private static readonly HashSet<string> s_noIcons = new(StringComparer.Ordinal);
+
     private readonly TrayIconHost _host;
     private readonly Dictionary<string, string> _lastState = new(StringComparer.Ordinal);
 
     public TrayController(TrayIconHost host) => _host = host;
+
+    /// <summary>La barra dentro de la barra de tareas, si el usuario la eligió.</summary>
+    public TaskbarBarHost? Bar { get; set; }
 
     /// <summary>Si la clave es de un dispositivo, devuelve su id.</summary>
     public static string? DeviceIdFromKey(string key) =>
@@ -36,6 +44,18 @@ internal sealed class TrayController : IDisposable
         var live = visible
             .Where(d => d.IsConnected && !d.IsStale && d.Level is not null && settings.HasTrayIcon(d))
             .ToList();
+
+        if (Bar is TaskbarBarHost bar)
+        {
+            bar.Update(new TaskbarBarState(BarItems(live, visible, settings), light));
+            if (bar.IsAvailable)
+            {
+                // Con la barra puesta no hacen falta iconos junto al reloj.
+                _host.RemoveAllExcept(s_noIcons);
+                _lastState.Clear();
+                return;
+            }
+        }
 
         var wanted = new List<(string Key, TrayIconSpec? Spec, string Tooltip)>();
         if (settings.TrayMode == TrayMode.PerDevice)
@@ -84,6 +104,30 @@ internal sealed class TrayController : IDisposable
         {
             _lastState.Remove(key);
         }
+    }
+
+    private static List<TaskbarItemSpec> BarItems(List<BatteryDevice> live, List<BatteryDevice> visible, AppSettings s)
+    {
+        var items = live
+            .Select(d => new TaskbarItemSpec(
+                DevicePrefix + d.Id,
+                d.Level,
+                d.GetBand(s.LowBatteryThreshold),
+                d.IsCharging,
+                d.Kind,
+                s.DeviceColor(d),
+                Loc.Format("Percent", d.Level),
+                Tooltip(d, s)))
+            .ToList();
+
+        if (items.Count == 0)
+        {
+            // Sin dispositivos queda el logo, para poder abrir la app.
+            string tip = visible.Count > 0 ? SummaryTooltip(visible, s) : Loc.Get("TrayNoDevices");
+            items.Add(new TaskbarItemSpec(MainKey, null, LevelBand.Unknown, false, DeviceKind.Unknown, null, "", tip, IsAppIcon: true));
+        }
+
+        return items;
     }
 
     private static TrayIconSpec Spec(BatteryDevice d, AppSettings s) =>

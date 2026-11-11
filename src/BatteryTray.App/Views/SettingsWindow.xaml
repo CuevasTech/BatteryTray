@@ -51,9 +51,16 @@
 
                 <!-- Barra de tareas -->
                 <TextBlock x:Name="TaskbarHeader" Style="{StaticResource SectionHeaderStyle}" />
-                <tk:SettingsCard x:Name="TrayModeCard">
+                <tk:SettingsCard x:Name="PlacementCard">
                     <tk:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE75B;" />
+                    </tk:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="PlacementCombo" MinWidth="200" SelectionChanged="PlacementCombo_SelectionChanged" />
+                </tk:SettingsCard>
+                <InfoBar x:Name="BarUnavailableBar" IsClosable="False" IsOpen="False" Severity="Warning" />
+                <tk:SettingsCard x:Name="TrayModeCard">
+                    <tk:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7C4;" />
                     </tk:SettingsCard.HeaderIcon>
                     <ComboBox x:Name="TrayModeCombo" MinWidth="200" SelectionChanged="TrayModeCombo_SelectionChanged" />
                 </tk:SettingsCard>

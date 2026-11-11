@@ -135,6 +135,38 @@ public sealed class SettingsTests : IDisposable
     }
 
     [Fact]
+    public void Placement_DefaultsToNotificationArea_AndUnknownValuesAreReset()
+    {
+        var s = new AppSettings();
+        Assert.Equal(DisplayPlacement.NotificationArea, s.Placement);
+
+        s.Placement = (DisplayPlacement)42;
+        s.Normalize();
+        Assert.Equal(DisplayPlacement.NotificationArea, s.Placement);
+
+        s.Placement = DisplayPlacement.Taskbar;
+        s.Normalize();
+        Assert.Equal(DisplayPlacement.Taskbar, s.Placement);
+    }
+
+    [Fact]
+    public void Placement_RoundTripsThroughJson()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), "bt-tests-" + Guid.NewGuid().ToString("N"));
+        string path = Path.Combine(dir, "settings.json");
+        try
+        {
+            JsonStore.SaveSettings(path, new AppSettings { Placement = DisplayPlacement.Taskbar });
+            Assert.Contains("\"Taskbar\"", File.ReadAllText(path), StringComparison.Ordinal);
+            Assert.Equal(DisplayPlacement.Taskbar, JsonStore.LoadSettings(path).Placement);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
+
+    [Fact]
     public void Defaults_UseWindowsBatteryStyleWithColors()
     {
         var s = new AppSettings();

@@ -39,7 +39,12 @@ public sealed partial class SettingsWindow : Window
         RefreshDevices();
 
         _controller.DevicesChanged += RefreshDevices;
-        Closed += (_, _) => _controller.DevicesChanged -= RefreshDevices;
+        _controller.TaskbarBarChanged += UpdatePlacementState;
+        Closed += (_, _) =>
+        {
+            _controller.DevicesChanged -= RefreshDevices;
+            _controller.TaskbarBarChanged -= UpdatePlacementState;
+        };
         _ = LoadStartupStateAsync();
         _loading = false;
     }
@@ -71,6 +76,9 @@ public sealed partial class SettingsWindow : Window
         RestartButton.Content = Loc.Get("RestartNow");
 
         TaskbarHeader.Text = Loc.Get("SectionTaskbar");
+        PlacementCard.Header = Loc.Get("PlacementHeader");
+        PlacementCard.Description = Loc.Get("PlacementDesc");
+        BarUnavailableBar.Message = Loc.Get("BarUnavailable");
         TrayModeCard.Header = Loc.Get("TrayModeHeader");
         TrayModeCard.Description = Loc.Get("TrayModeDesc");
         IconStyleCard.Header = Loc.Get("IconStyleHeader");
@@ -117,6 +125,9 @@ public sealed partial class SettingsWindow : Window
         LanguageCombo.Items.Add(new ComboBoxItem { Content = "Español", Tag = "es" });
         LanguageCombo.Items.Add(new ComboBoxItem { Content = "English", Tag = "en" });
 
+        PlacementCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("PlacementTray"), Tag = DisplayPlacement.NotificationArea });
+        PlacementCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("PlacementTaskbar"), Tag = DisplayPlacement.Taskbar });
+
         TrayModeCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("TrayModePerDevice"), Tag = TrayMode.PerDevice });
         TrayModeCombo.Items.Add(new ComboBoxItem { Content = Loc.Get("TrayModeSingle"), Tag = TrayMode.Single });
 
@@ -129,6 +140,7 @@ public sealed partial class SettingsWindow : Window
     {
         AppSettings s = _controller.Settings;
         SelectByTag(LanguageCombo, s.Language);
+        SelectByTag(PlacementCombo, s.Placement);
         SelectByTag(TrayModeCombo, s.TrayMode);
         SelectByTag(IconStyleCombo, s.IconStyle);
         DeviceColorToggle.IsOn = s.ColorPerDevice;
@@ -137,6 +149,26 @@ public sealed partial class SettingsWindow : Window
         ThresholdValue.Text = Loc.Format("Percent", s.LowBatteryThreshold);
         ConnectionToggle.IsOn = s.NotifyConnectionChanges;
         DemoToggle.IsOn = s.DemoMode;
+        UpdatePlacementState();
+    }
+
+    /// <summary>
+    /// Con la barra en la barra de tareas, los ajustes que solo afectan a los iconos junto
+    /// al reloj se desactivan; y si la barra no cabe, se explica por qué se ven los iconos.
+    /// </summary>
+    private void UpdatePlacementState()
+    {
+        bool taskbar = _controller.Settings.Placement == DisplayPlacement.Taskbar;
+        bool barShown = taskbar && _controller.TaskbarBarActive;
+        BarUnavailableBar.IsOpen = taskbar && !barShown;
+
+        string? trayOnly = barShown ? Loc.Get("TrayOnlySetting") : null;
+        TrayModeCard.IsEnabled = !barShown;
+        TrayModeCard.Description = trayOnly ?? Loc.Get("TrayModeDesc");
+        IconStyleCard.IsEnabled = !barShown;
+        IconStyleCard.Description = trayOnly ?? Loc.Get("IconStyleDesc");
+        PinCard.IsEnabled = !barShown;
+        PinCard.Description = trayOnly ?? Loc.Get("PinDesc");
     }
 
     private static void SelectByTag(ComboBox combo, object value)
@@ -369,6 +401,15 @@ public sealed partial class SettingsWindow : Window
     }
 
     private void RestartButton_Click(object sender, RoutedEventArgs e) => _controller.Restart();
+
+    private void PlacementCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_loading && PlacementCombo.SelectedItem is ComboBoxItem { Tag: DisplayPlacement placement })
+        {
+            _controller.UpdateSettings(s => s.Placement = placement);
+            UpdatePlacementState();
+        }
+    }
 
     private void TrayModeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {

@@ -155,3 +155,118 @@ public class RendererTests
     [System.Runtime.InteropServices.DllImport("user32.dll")]
     private static extern bool DestroyIcon(nint icon);
 }
+
+public class TaskbarBarRendererTests
+{
+    private static readonly TaskbarItemSpec[] s_items =
+    [
+        new("dev:a", 47, LevelBand.Normal, false, DeviceKind.Mouse, "blue", "47 %", "Ratón: 47 %"),
+        new("dev:b", 100, LevelBand.Normal, true, DeviceKind.Headphones, "purple", "100 %", "Cascos: 100 %"),
+        new("dev:c", 8, LevelBand.Critical, false, DeviceKind.Keyboard, null, "8 %", "Teclado: 8 %"),
+    ];
+
+    [Fact]
+    public void Measure_ItemsAreSideBySideInsideTheBar()
+    {
+        TaskbarBarLayout layout = TaskbarBarRenderer.Measure(s_items, 48, 1.0);
+
+        Assert.Equal(48, layout.Size.Height);
+        Assert.Equal(s_items.Length, layout.Items.Count);
+        for (int i = 0; i < layout.Items.Count; i++)
+        {
+            Rectangle r = layout.Items[i];
+            Assert.True(r.Left >= 0 && r.Right <= layout.Size.Width && r.Top >= 0 && r.Bottom <= layout.Size.Height);
+            if (i > 0)
+            {
+                Assert.True(r.Left >= layout.Items[i - 1].Right, "los elementos no se solapan");
+            }
+        }
+    }
+
+    [Fact]
+    public void Measure_GrowsWithScale()
+    {
+        TaskbarBarLayout normal = TaskbarBarRenderer.Measure(s_items, 48, 1.0);
+        TaskbarBarLayout large = TaskbarBarRenderer.Measure(s_items, 72, 1.5);
+        Assert.True(large.Size.Width > normal.Size.Width * 1.3);
+    }
+
+    [Fact]
+    public void Measure_FitsSmallTaskbars()
+    {
+        TaskbarBarLayout layout = TaskbarBarRenderer.Measure(s_items, 32, 1.0);
+        Assert.All(layout.Items, r => Assert.True(r.Height <= 32 && r.Top >= 0));
+    }
+
+    [Fact]
+    public void HitTest_FindsTheItemUnderThePoint()
+    {
+        TaskbarBarLayout layout = TaskbarBarRenderer.Measure(s_items, 48, 1.0);
+        Rectangle second = layout.Items[1];
+        Assert.Equal(1, layout.HitTest(new Point(second.X + 3, second.Y + second.Height / 2)));
+        Assert.Equal(-1, layout.HitTest(new Point(0, 0)));
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Render_NoFullyTransparentPixels_SoEveryClickReachesTheBar(bool light)
+    {
+        // Windows deja pasar los clics por los píxeles con alfa 0 de una ventana "layered":
+        // toda la barra debe tener al menos alfa 1 (también alrededor del texto y las baterías).
+        using Bitmap bmp = TaskbarBarRenderer.Render(s_items, 48, 1.25, light, hoverIndex: 1);
+        for (int y = 0; y < bmp.Height; y++)
+        {
+            for (int x = 0; x < bmp.Width; x++)
+            {
+                Assert.True(bmp.GetPixel(x, y).A > 0, $"píxel transparente en ({x}, {y})");
+            }
+        }
+    }
+
+    [Fact]
+    public void Render_HoverHighlightsOnlyThatItem()
+    {
+        TaskbarBarLayout layout = TaskbarBarRenderer.Measure(s_items, 48, 1.0);
+        using Bitmap normal = TaskbarBarRenderer.Render(s_items, 48, 1.0, false);
+        using Bitmap hover = TaskbarBarRenderer.Render(s_items, 48, 1.0, false, hoverIndex: 0);
+
+        Rectangle first = layout.Items[0];
+        Rectangle second = layout.Items[1];
+        // Esquina interior del elemento (sin icono ni texto): solo cambia con el ratón encima.
+        Assert.True(hover.GetPixel(first.X + 4, first.Y + 4).A > normal.GetPixel(first.X + 4, first.Y + 4).A);
+        Assert.Equal(normal.GetPixel(second.X + 4, second.Y + 4), hover.GetPixel(second.X + 4, second.Y + 4));
+    }
+
+    [Fact]
+    public void Render_AppIconWhenThereAreNoDevices()
+    {
+        TaskbarItemSpec[] items = [new("main", null, LevelBand.Unknown, false, DeviceKind.Unknown, null, "", "BatteryTray", IsAppIcon: true)];
+        using var icon = new Bitmap(16, 16);
+        using (Graphics g = Graphics.FromImage(icon))
+        {
+            g.Clear(Color.Red);
+        }
+
+        using Bitmap bmp = TaskbarBarRenderer.Render(items, 48, 1.0, false, appIcon: icon);
+        TaskbarBarLayout layout = TaskbarBarRenderer.Measure(items, 48, 1.0);
+        Rectangle r = layout.Items[0];
+        Color center = bmp.GetPixel(r.X + r.Width / 2, r.Y + r.Height / 2);
+        Assert.True(center.R > 200 && center.G < 60, "se dibuja el logo");
+    }
+
+    [Fact]
+    public void RenderBattery_HasRoomForTheChargingBolt()
+    {
+        using Bitmap battery = TrayIconRenderer.RenderBattery(20, 10, 60, LevelBand.Normal, true, "blue", false);
+        Assert.Equal(20, battery.Width);
+        Assert.Equal(20, battery.Height);
+        bool boltAboveBody = false;
+        for (int x = 0; x < battery.Width; x++)
+        {
+            boltAboveBody |= battery.GetPixel(x, 3).A > 0; // por encima de la batería (que empieza en y = 5)
+        }
+
+        Assert.True(boltAboveBody, "el rayo sobresale por arriba, como en Windows");
+    }
+}

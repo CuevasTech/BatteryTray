@@ -2,10 +2,11 @@
 
 Nombre provisional: **BatteryTray** (se decide en la fase 0).
 
-> **Estado (10/11/2026):** versión 0.1.0.
+> **Estado (11/11/2026):** versión 0.1.0.
 > - Hecho: fase 0 (repositorio, licencia GPL-3.0, CI) y fase 1 completa: Bluetooth vía Windows y GATT, batería del equipo, iconos de bandeja iguales que la batería de Windows 11 (relleno del color de cada dispositivo, borde rojo con batería baja), panel, ajustes, avisos, inicio con Windows, español/inglés, modo demostración y diagnóstico. Logo, portada y ficha de la Store (`docs/store`).
-> - Distribución: **solo Microsoft Store** (sin ejecutables en GitHub). Paquete con `tools/Pack-Store.ps1`.
-> - Pendiente: identidad de Partner Center en el manifiesto, primer envío a la Store, probar con dispositivos reales y añadir más marcas (fase 3).
+> - Nuevo: modo **barra en la barra de tareas** (ventana hija de `Shell_TrayWnd`, con vuelta automática a los iconos si no cabe).
+> - Distribución: **solo Microsoft Store** (sin ejecutables en GitHub). Paquete con `tools/Pack-Store.ps1`. Identidad de Partner Center ya en el manifiesto; versión de la Store probada en local (Modo de desarrollador).
+> - Pendiente: primer envío a la Store, probar con dispositivos reales y añadir más marcas (fase 3).
 
 Una app pequeña, gratuita y de código abierto que muestra la batería de tus dispositivos inalámbricos (auriculares, ratón, teclado, mandos...) junto al reloj de la barra de tareas, con el aspecto de Windows 11.
 
