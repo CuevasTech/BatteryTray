@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 600" width="1280" height="600" role="img" aria-labelledby="title desc">
-  <title id="title">BatteryTray</title>
+  <title id="title">Battery Tray</title>
   <desc id="desc">La batería de tus dispositivos Bluetooth en la barra de tareas de Windows: panel al estilo Windows 11 y baterías iguales que la de Windows junto al reloj.</desc>
   <style>
     .t { font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
@@ -75,7 +75,7 @@
     </g>
 
     <g class="rise">
-      <text class="t" x="80" y="320" font-size="76" font-weight="700" fill="#FFFFFF" letter-spacing="-1">BatteryTray</text>
+      <text class="t" x="80" y="320" font-size="76" font-weight="700" fill="#FFFFFF" letter-spacing="-1">Battery Tray</text>
       <text class="t" x="82" y="372" font-size="27" fill="#C9D2E8">La batería de tus dispositivos,</text>
       <text class="t" x="82" y="408" font-size="27" fill="#C9D2E8">en la barra de tareas de Windows.</text>
       <text class="t" x="82" y="446" font-size="18" fill="#8793B3">Your devices' battery, right in the Windows taskbar.</text>
@@ -170,7 +170,7 @@
       <!-- Flecha ^ -->
       <path d="M770 503 l7 -7 l7 7" fill="none" stroke="#DCE3F2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 
-      <!-- Baterías de BatteryTray: borde blanco y relleno de color, como las de Windows -->
+      <!-- Baterías junto al reloj, iguales que las de Windows -->
       <g transform="translate(806 488)">
         <rect x="1" y="1" width="36" height="18" rx="5.5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
         <rect x="38" y="6.5" width="2.2" height="7" rx="1" fill="#FFFFFF"/>

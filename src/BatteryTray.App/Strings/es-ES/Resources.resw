@@ -4,7 +4,7 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="AppDisplayName" xml:space="preserve"><value>BatteryTray</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>Battery Tray</value></data>
   <data name="AppDescription" xml:space="preserve"><value>Batería de tus dispositivos Bluetooth en la barra de tareas</value></data>
   <data name="ThisPc" xml:space="preserve"><value>Este equipo</value></data>
   <data name="FlyoutTitle" xml:space="preserve"><value>Baterías</value></data>
@@ -25,12 +25,12 @@
   <data name="TimeDays" xml:space="preserve"><value>hace {0} d</value></data>
   <data name="UpdatedAt" xml:space="preserve"><value>Actualizado a las {0}</value></data>
   <data name="DemoBanner" xml:space="preserve"><value>Modo demostración: dispositivos simulados</value></data>
-  <data name="WelcomeTitle" xml:space="preserve"><value>BatteryTray está en marcha</value></data>
+  <data name="WelcomeTitle" xml:space="preserve"><value>Battery Tray está en marcha</value></data>
   <data name="WelcomeBody" xml:space="preserve"><value>¿Quieres que se abra al iniciar Windows?</value></data>
   <data name="WelcomeEnable" xml:space="preserve"><value>Sí, iniciar con Windows</value></data>
   <data name="A11yDevice" xml:space="preserve"><value>{0}, {1}, {2}</value></data>
   <data name="Percent" xml:space="preserve"><value>{0} %</value></data>
-  <data name="TrayNoDevices" xml:space="preserve"><value>BatteryTray: sin dispositivos con batería</value></data>
+  <data name="TrayNoDevices" xml:space="preserve"><value>Battery Tray: sin dispositivos con batería</value></data>
   <data name="TrayCharging" xml:space="preserve"><value>cargando</value></data>
   <data name="MenuOpen" xml:space="preserve"><value>Ver baterías</value></data>
   <data name="MenuRefresh" xml:space="preserve"><value>Actualizar ahora</value></data>
@@ -45,7 +45,7 @@
   <data name="SettingsTitle" xml:space="preserve"><value>Ajustes</value></data>
   <data name="SectionGeneral" xml:space="preserve"><value>General</value></data>
   <data name="StartupHeader" xml:space="preserve"><value>Iniciar con Windows</value></data>
-  <data name="StartupDesc" xml:space="preserve"><value>Abre BatteryTray al iniciar sesión</value></data>
+  <data name="StartupDesc" xml:space="preserve"><value>Abre Battery Tray al iniciar sesión</value></data>
   <data name="StartupBlocked" xml:space="preserve"><value>Desactivado desde el Administrador de tareas o la configuración de Windows</value></data>
   <data name="LanguageHeader" xml:space="preserve"><value>Idioma</value></data>
   <data name="LanguageDesc" xml:space="preserve"><value>Se aplica al reiniciar la app</value></data>

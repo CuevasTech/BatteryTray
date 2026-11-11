@@ -4,7 +4,7 @@
 
 ## Español
 
-BatteryTray es una app de código abierto que muestra la batería de tus dispositivos en la barra de tareas.
+Battery Tray es una app de código abierto que muestra la batería de tus dispositivos en la barra de tareas.
 
 **No recoge, envía ni comparte ningún dato.** La app no se conecta a Internet, no tiene telemetría, no muestra publicidad y no usa servicios de terceros.
 
@@ -27,7 +27,7 @@ Si tienes dudas, abre un aviso en https://github.com/CuevasTech/BatteryTray/issu
 
 ## English
 
-BatteryTray is an open-source app that shows your devices' battery levels in the taskbar.
+Battery Tray is an open-source app that shows your devices' battery levels in the taskbar.
 
 **It does not collect, send or share any data.** The app does not connect to the internet, has no telemetry, shows no ads and uses no third-party services.
 
