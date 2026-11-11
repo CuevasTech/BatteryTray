@@ -112,26 +112,30 @@ public class RendererTests
     }
 
     [Fact]
-    public void WindowsBattery_WhiteOutlineAndDeviceColorFill()
+    public void WindowsBattery_WhiteOutlineAndWhiteFill_LikeWindows()
     {
         // A 20 px la batería mide 19×10 como la de Windows: contorno en y=5, relleno de y=7 a y=12.
-        var spec = new TrayIconSpec(50, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.WindowsBattery, "blue");
+        var spec = new TrayIconSpec(50, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.WindowsBattery);
         using Bitmap bmp = TrayIconRenderer.RenderBitmap(spec, 20, lightTaskbar: false);
 
-        Assert.Equal(Color.White.ToArgb(), bmp.GetPixel(9, 5).ToArgb());   // contorno blanco, como Windows
+        Assert.Equal(Color.White.ToArgb(), bmp.GetPixel(9, 5).ToArgb());   // contorno blanco
         Assert.Equal(0, bmp.GetPixel(9, 6).A);                            // hueco de 1 px
-        Assert.Equal(Color.FromArgb(255, 0x60, 0xCD, 0xFF).ToArgb(), bmp.GetPixel(3, 9).ToArgb()); // relleno azul
+        Assert.Equal(Color.White.ToArgb(), bmp.GetPixel(3, 9).ToArgb());   // relleno blanco
         Assert.Equal(0, bmp.GetPixel(15, 9).A);                           // vacío a la derecha (50 %)
     }
 
-    [Fact]
-    public void WindowsBattery_LowBatteryTurnsOutlineRed()
+    [Theory]
+    [InlineData(false, 0xD9, 0x2C, 0x2C)]
+    [InlineData(true, 0xC5, 0x0F, 0x1F)]
+    public void WindowsBattery_LowBattery_RedFillAndOutlineUnchanged(bool light, int r, int g, int b)
     {
-        var spec = new TrayIconSpec(10, LevelBand.Critical, false, DeviceKind.Mouse, IconStyle.WindowsBattery, "blue");
-        using Bitmap bmp = TrayIconRenderer.RenderBitmap(spec, 20, lightTaskbar: false);
+        // Como Windows 11: con la batería baja solo el relleno se pone rojo; el contorno no cambia.
+        var spec = new TrayIconSpec(30, LevelBand.Critical, false, DeviceKind.Mouse, IconStyle.WindowsBattery);
+        using Bitmap bmp = TrayIconRenderer.RenderBitmap(spec, 20, lightTaskbar: light);
 
-        Assert.Equal(Color.FromArgb(255, 255, 153, 164).ToArgb(), bmp.GetPixel(9, 5).ToArgb()); // borde rojo
-        Assert.Equal(Color.FromArgb(255, 0x60, 0xCD, 0xFF).ToArgb(), bmp.GetPixel(2, 9).ToArgb()); // relleno sigue azul
+        Color outline = bmp.GetPixel(9, 5);
+        Assert.True(outline.R == outline.G && outline.G == outline.B, $"el contorno no lleva color: {outline}");
+        Assert.Equal(Color.FromArgb(255, r, g, b).ToArgb(), bmp.GetPixel(3, 9).ToArgb());
     }
 
     [Fact]
@@ -160,9 +164,9 @@ public class TaskbarBarRendererTests
 {
     private static readonly TaskbarItemSpec[] s_items =
     [
-        new("dev:a", 47, LevelBand.Normal, false, DeviceKind.Mouse, "blue", "47 %", "Ratón: 47 %"),
-        new("dev:b", 100, LevelBand.Normal, true, DeviceKind.Headphones, "purple", "100 %", "Cascos: 100 %"),
-        new("dev:c", 8, LevelBand.Critical, false, DeviceKind.Keyboard, null, "8 %", "Teclado: 8 %"),
+        new("dev:a", 47, LevelBand.Normal, false, DeviceKind.Mouse, "47 %", "Ratón: 47 %"),
+        new("dev:b", 100, LevelBand.Normal, true, DeviceKind.Headphones, "100 %", "Cascos: 100 %"),
+        new("dev:c", 8, LevelBand.Critical, false, DeviceKind.Keyboard, "8 %", "Teclado: 8 %"),
     ];
 
     [Fact]
@@ -241,7 +245,7 @@ public class TaskbarBarRendererTests
     [Fact]
     public void Render_AppIconWhenThereAreNoDevices()
     {
-        TaskbarItemSpec[] items = [new("main", null, LevelBand.Unknown, false, DeviceKind.Unknown, null, "", "BatteryTray", IsAppIcon: true)];
+        TaskbarItemSpec[] items = [new("main", null, LevelBand.Unknown, false, DeviceKind.Unknown, "", "BatteryTray", IsAppIcon: true)];
         using var icon = new Bitmap(16, 16);
         using (Graphics g = Graphics.FromImage(icon))
         {
@@ -256,9 +260,42 @@ public class TaskbarBarRendererTests
     }
 
     [Fact]
+    public void Render_LowBatteryTurnsTheDeviceIconRed()
+    {
+        TaskbarItemSpec[] low = [new("k", 8, LevelBand.Critical, false, DeviceKind.Keyboard, "8 %", "")];
+        TaskbarItemSpec[] normal = [new("k", 80, LevelBand.Normal, false, DeviceKind.Keyboard, "80 %", "")];
+        TaskbarBarLayout layout = TaskbarBarRenderer.Measure(low, 48, 1.0);
+        Rectangle glyph = new(layout.Items[0].X + 8, 0, 16, 48); // el icono va justo tras el margen
+
+        Assert.True(CountReddish(TaskbarBarRenderer.Render(low, 48, 1.0, false), glyph) > 10, "icono rojo con batería baja");
+        Assert.Equal(0, CountReddish(TaskbarBarRenderer.Render(normal, 48, 1.0, false), glyph));
+    }
+
+    private static int CountReddish(Bitmap bmp, Rectangle area)
+    {
+        using (bmp)
+        {
+            int count = 0;
+            for (int y = area.Top; y < area.Bottom; y++)
+            {
+                for (int x = area.Left; x < area.Right; x++)
+                {
+                    Color c = bmp.GetPixel(x, y);
+                    if (c.A > 100 && c.R > 150 && c.G < 90)
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+    }
+
+    [Fact]
     public void RenderBattery_HasRoomForTheChargingBolt()
     {
-        using Bitmap battery = TrayIconRenderer.RenderBattery(20, 10, 60, LevelBand.Normal, true, "blue", false);
+        using Bitmap battery = TrayIconRenderer.RenderBattery(20, 10, 60, LevelBand.Normal, true, false);
         Assert.Equal(20, battery.Width);
         Assert.Equal(20, battery.Height);
         bool boltAboveBody = false;

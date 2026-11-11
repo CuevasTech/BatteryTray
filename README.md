@@ -18,7 +18,7 @@
 <br>
 
 <p align="center">
-  <img src="docs/images/taskbar-bar.png" width="820" alt="Barra de BatteryTray dentro de la barra de tareas: ratón al 47 %, cascos al 82 % y mando cargando al 64 %">
+  <img src="docs/images/taskbar-bar.png" width="820" alt="Barra de BatteryTray dentro de la barra de tareas: ratón con batería baja al 12 % en rojo, cascos al 82 % y mando cargando al 64 % en verde">
   <br>
   <b>En la propia barra de tareas</b>: cada dispositivo con su batería y su porcentaje.
 </p>
@@ -28,7 +28,7 @@
 <p align="center">
   <img src="docs/images/taskbar-icons.png" width="820" alt="Iconos de BatteryTray junto al reloj, iguales que la batería de Windows 11">
   <br>
-  <b>O junto al reloj</b>: la misma batería de Windows 11, con el color de cada dispositivo.
+  <b>O junto al reloj</b>: la misma batería que dibuja Windows 11.
 </p>
 
 <br>
@@ -38,8 +38,8 @@
     <td><img src="docs/images/flyout.png" width="320" alt="Panel de BatteryTray con cuatro dispositivos, uno de ellos desconectado"></td>
     <td valign="middle">
       <h3>Un clic y lo ves todo</h3>
-      🔋 <b>Igual que Windows 11</b>, con su color para cada dispositivo<br><br>
-      ⚡ <b>Rayo al cargar</b> y borde rojo cuando queda poca<br><br>
+      🔋 <b>Igual que la batería de Windows 11</b><br><br>
+      ⚡ <b>En verde al cargar</b> y en rojo cuando queda poca<br><br>
       🔔 <b>Te avisa</b> antes de que se apaguen<br><br>
       🕓 <b>Último nivel</b> de los que están desconectados<br><br>
       🌗 <b>Tema claro y oscuro</b>, en español e inglés

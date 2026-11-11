@@ -18,7 +18,7 @@
 <br>
 
 <p align="center">
-  <img src="docs/images/taskbar-bar.en.png" width="820" alt="BatteryTray bar inside the taskbar: mouse at 47%, headphones at 82% and controller charging at 64%">
+  <img src="docs/images/taskbar-bar.en.png" width="820" alt="BatteryTray bar inside the taskbar: mouse low at 12% in red, headphones at 82% and controller charging at 64% in green">
   <br>
   <b>Right inside the taskbar</b>: every device with its battery and percentage.
 </p>
@@ -28,7 +28,7 @@
 <p align="center">
   <img src="docs/images/taskbar-icons.en.png" width="820" alt="BatteryTray icons next to the clock, just like the Windows 11 battery">
   <br>
-  <b>Or next to the clock</b>: the same Windows 11 battery, in each device's own color.
+  <b>Or next to the clock</b>: the same battery Windows 11 draws.
 </p>
 
 <br>
@@ -38,8 +38,8 @@
     <td><img src="docs/images/flyout.en.png" width="320" alt="BatteryTray flyout with four devices, one of them disconnected"></td>
     <td valign="middle">
       <h3>One click shows it all</h3>
-      🔋 <b>Just like Windows 11</b>, with a color for each device<br><br>
-      ⚡ <b>Bolt while charging</b>, red outline when low<br><br>
+      🔋 <b>Just like the Windows 11 battery</b><br><br>
+      ⚡ <b>Green while charging</b>, red when low<br><br>
       🔔 <b>Alerts you</b> before they run out<br><br>
       🕓 <b>Last known level</b> of disconnected devices<br><br>
       🌗 <b>Light and dark theme</b>, English and Spanish

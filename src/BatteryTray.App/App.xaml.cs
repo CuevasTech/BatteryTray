@@ -6,6 +6,13 @@ namespace BatteryTray;
 
 public partial class App : Application
 {
+    /// <summary>
+    /// BATTERYTRAY_SCREENSHOTS=1 es solo para hacer las capturas del README y de la Store:
+    /// oculta el aviso del modo demostración y pinta las barras del panel con el azul de
+    /// Windows 11 por defecto en vez del color de acento del equipo donde se hacen.
+    /// </summary>
+    internal static bool ScreenshotMode { get; } = Environment.GetEnvironmentVariable("BATTERYTRAY_SCREENSHOTS") == "1";
+
     public App()
     {
         InitializeComponent();

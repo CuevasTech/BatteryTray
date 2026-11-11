@@ -188,12 +188,6 @@ internal sealed class AppController
         IReadOnlyList<BatteryDevice> devices = Devices;
         ApplyPlacement();
 
-        // Cada dispositivo nuevo recibe un color propio (y se guarda para que no cambie).
-        if (Settings.AssignMissingColors(devices))
-        {
-            JsonStore.SaveSettings(AppInfo.SettingsPath, Settings);
-        }
-
         _tray?.Update(devices, Settings);
         _flyout?.UpdateDevices(devices);
         DevicesChanged?.Invoke();

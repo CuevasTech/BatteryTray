@@ -15,20 +15,20 @@ Directory.CreateDirectory(outDir);
 
 TrayIconSpec[] specs =
 [
-    // Estilo batería de Windows: blanca (igual que Windows) y con contorno de color.
-    new(98, LevelBand.Normal, false, DeviceKind.Computer, IconStyle.WindowsBattery, null),
-    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.WindowsBattery, "blue"),
-    new(55, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.WindowsBattery, "purple"),
-    new(64, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.WindowsBattery, "orange"),
-    new(12, LevelBand.Critical, false, DeviceKind.Keyboard, IconStyle.WindowsBattery, "pink"),
-    new(35, LevelBand.Warning, false, DeviceKind.Pen, IconStyle.WindowsBattery, "teal"),
-    new(100, LevelBand.Normal, false, DeviceKind.Speaker, IconStyle.WindowsBattery, "indigo"),
+    // Estilo batería de Windows: normal, cargando y con batería baja.
+    new(98, LevelBand.Normal, false, DeviceKind.Computer, IconStyle.WindowsBattery),
+    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.WindowsBattery),
+    new(55, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.WindowsBattery),
+    new(64, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.WindowsBattery),
+    new(12, LevelBand.Critical, false, DeviceKind.Keyboard, IconStyle.WindowsBattery),
+    new(35, LevelBand.Warning, false, DeviceKind.Pen, IconStyle.WindowsBattery),
+    new(100, LevelBand.Normal, false, DeviceKind.Speaker, IconStyle.WindowsBattery),
     // Porcentaje e icono del dispositivo, con batería pequeña.
-    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.Percentage, "blue"),
-    new(12, LevelBand.Critical, false, DeviceKind.Keyboard, IconStyle.Percentage, "pink"),
-    new(64, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.Percentage, "orange"),
-    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.DeviceIcon, "blue"),
-    new(55, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.DeviceIcon, "purple"),
+    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.Percentage),
+    new(12, LevelBand.Critical, false, DeviceKind.Keyboard, IconStyle.Percentage),
+    new(64, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.Percentage),
+    new(82, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.DeviceIcon),
+    new(55, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.DeviceIcon),
 ];
 
 foreach (int size in new[] { 16, 20, 24, 32 })

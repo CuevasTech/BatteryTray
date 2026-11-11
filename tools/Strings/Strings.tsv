@@ -110,13 +110,3 @@ KindWatch	Reloj	Watch
 KindUnknown	Dispositivo	Device
 ThresholdHeader	Nivel de aviso	Alert level
 IconStyleWindows	Batería (como Windows)	Battery (like Windows)
-DeviceColor	Color	Color
-Color_blue	Azul	Blue
-Color_purple	Morado	Purple
-Color_orange	Naranja	Orange
-Color_pink	Rosa	Pink
-Color_teal	Turquesa	Teal
-Color_indigo	Índigo	Indigo
-Color_none	Sin color (como Windows)	No color (like Windows)
-DeviceColorHeader	Un color para cada dispositivo	A color for each device
-DeviceColorDesc	El interior de cada batería lleva su color para distinguirlas. Desactívalo para que sean iguales que la de Windows.	Each battery is filled with its own color so you can tell them apart. Turn it off to make them look exactly like the Windows one.

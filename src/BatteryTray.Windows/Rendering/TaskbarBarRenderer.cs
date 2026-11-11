@@ -17,7 +17,6 @@ public sealed record TaskbarItemSpec(
     LevelBand Band,
     bool Charging,
     DeviceKind Kind,
-    string? ColorKey,
     string Text,
     string Tooltip,
     bool IsAppIcon = false);
@@ -48,8 +47,9 @@ public sealed class TaskbarBarLayout(Size size, IReadOnlyList<Rectangle> items, 
 
 /// <summary>
 /// Dibuja la "barra de herramientas" que va dentro de la barra de tareas: por cada
-/// dispositivo, su icono, la batería de Windows 11 (con el color del dispositivo) y el
-/// porcentaje, con el mismo efecto al pasar el ratón que los botones de la barra.
+/// dispositivo, su icono, la batería de Windows 11 (con sus mismos colores) y el porcentaje,
+/// con el mismo efecto al pasar el ratón que los botones de la barra. Con la batería baja,
+/// el icono del dispositivo también se pone rojo para que se vea de un vistazo.
 /// Medidas a 100 % de escala; todo se multiplica por la escala de la pantalla.
 /// </summary>
 public static class TaskbarBarRenderer
@@ -141,6 +141,7 @@ public static class TaskbarBarRenderer
 
         Color foreground = TrayIconRenderer.Foreground(lightTaskbar);
         using var textBrush = new SolidBrush(foreground);
+        using var criticalBrush = new SolidBrush(TrayIconRenderer.Critical(lightTaskbar));
         using var textFont = new Font(s_textFamily.Value, TextSize * (float)scale, FontStyle.Regular, GraphicsUnit.Pixel);
         using var glyphFont = new Font(s_glyphFamily.Value, GlyphSize * (float)scale, FontStyle.Regular, GraphicsUnit.Pixel);
         using var format = (StringFormat)StringFormat.GenericTypographic.Clone();
@@ -177,14 +178,15 @@ public static class TaskbarBarRenderer
                 continue;
             }
 
-            // Icono del tipo de dispositivo.
-            g.DrawString(DeviceGlyphs.For(item.Kind), glyphFont, textBrush, new RectangleF(x, 0, glyph, height), centered);
+            // Icono del tipo de dispositivo (en rojo si queda poca batería y no está cargando).
+            bool low = item.Band == LevelBand.Critical && !item.Charging;
+            g.DrawString(DeviceGlyphs.For(item.Kind), glyphFont, low ? criticalBrush : textBrush, new RectangleF(x, 0, glyph, height), centered);
             x += glyph + Px(GlyphGap, scale);
 
-            // La batería de Windows 11, con el color del dispositivo.
+            // La batería de Windows 11, con sus mismos colores.
             int bw = Px(BatteryWidth, scale);
             int bh = Px(BatteryHeight, scale);
-            using (Bitmap battery = TrayIconRenderer.RenderBattery(bw, bh, item.Level, item.Band, item.Charging, item.ColorKey, lightTaskbar))
+            using (Bitmap battery = TrayIconRenderer.RenderBattery(bw, bh, item.Level, item.Band, item.Charging, lightTaskbar))
             {
                 int top = (height - bh) / 2 - bh / 2;
                 g.DrawImage(battery, new Rectangle((int)x, top, battery.Width, battery.Height));

@@ -96,8 +96,8 @@ public sealed partial class FlyoutWindow : Window
         DeviceList.ItemsSource = items;
         EmptyPanel.Visibility = items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         UpdatedText.Text = Loc.Format("UpdatedAt", DateTime.Now.ToString("t", Loc.Culture));
-        // BATTERYTRAY_SCREENSHOTS=1 oculta el aviso de demostración (solo para hacer las capturas de la Store).
-        DemoBar.IsOpen = settings.DemoMode && Environment.GetEnvironmentVariable("BATTERYTRAY_SCREENSHOTS") != "1";
+        // En el modo de capturas no se enseña el aviso de demostración (ver App.ScreenshotMode).
+        DemoBar.IsOpen = settings.DemoMode && !App.ScreenshotMode;
         WelcomeBar.IsOpen = !settings.WelcomeDismissed;
 
         if (IsOpen)

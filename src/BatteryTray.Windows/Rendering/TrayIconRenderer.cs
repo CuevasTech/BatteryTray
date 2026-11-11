@@ -9,15 +9,14 @@ using BatteryTray.Core.Settings;
 namespace BatteryTray.Windows.Rendering;
 
 /// <summary>Qué hay que dibujar en un icono de la bandeja.</summary>
-/// <param name="ColorKey">Color del relleno (de <see cref="DeviceColors"/>), o null para los colores de Windows.</param>
-public sealed record TrayIconSpec(int? Level, LevelBand Band, bool Charging, DeviceKind Kind, IconStyle Style, string? ColorKey = null);
+public sealed record TrayIconSpec(int? Level, LevelBand Band, bool Charging, DeviceKind Kind, IconStyle Style);
 
 /// <summary>
 /// Dibuja los iconos de la bandeja copiando el icono de batería de Windows 11 (medido píxel
 /// a píxel: a 20 px es una batería de 19×10 con contorno de 1 px, 1 px de hueco, relleno
 /// de 15×6 y borne de 1 px) y el rayo de carga recortado en el centro.
-/// La diferencia: el relleno lleva el color de cada dispositivo para distinguirlos, y el
-/// contorno se pone rojo cuando la batería está baja.
+/// Los colores son los mismos que usa Windows: el contorno siempre del color del texto y el
+/// relleno verde cargando, rojo con la batería baja y, si no, del color del texto.
 /// </summary>
 public static class TrayIconRenderer
 {
@@ -26,10 +25,10 @@ public static class TrayIconRenderer
 
     private sealed record Palette(Color Foreground, Color Critical, Color Success);
 
-    // Colores medidos en el icono de batería de Windows 11 (verde #9FD89F en tema oscuro)
-    // y los de la paleta Fluent para el resto de estados.
-    private static readonly Palette s_dark = new(Color.White, Color.FromArgb(255, 255, 153, 164), Color.FromArgb(255, 159, 216, 159));
-    private static readonly Palette s_light = new(Color.FromArgb(255, 26, 26, 26), Color.FromArgb(255, 196, 43, 28), Color.FromArgb(255, 14, 122, 13));
+    // Los colores del icono de batería de Windows 11, sacados de sus propios recursos
+    // (SystemTray, en MicrosoftWindows.Client.Core): texto, rojo (batería baja) y verde (cargando).
+    private static readonly Palette s_dark = new(Color.White, Color.FromArgb(255, 0xD9, 0x2C, 0x2C), Color.FromArgb(255, 0x9F, 0xD8, 0x9F));
+    private static readonly Palette s_light = new(Color.FromArgb(0xE4, 0, 0, 0), Color.FromArgb(255, 0xC5, 0x0F, 0x1F), Color.FromArgb(255, 0x10, 0x7C, 0x10));
 
     // Rayo de carga en un cuadro de 1×1 (x, y).
     private static readonly PointF[] s_bolt =
@@ -59,7 +58,7 @@ public static class TrayIconRenderer
         g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
 
         bool critical = spec.Band == LevelBand.Critical && !spec.Charging;
-        (Color outline, Color fill) = BatteryColors(pal, spec.Band, spec.Charging, spec.ColorKey, lightTaskbar);
+        (Color outline, Color fill) = BatteryColors(pal, spec.Band, spec.Charging);
 
         if (spec.Style == IconStyle.WindowsBattery)
         {
@@ -101,12 +100,15 @@ public static class TrayIconRenderer
     /// <summary>Color del texto de la barra de tareas (blanco en oscuro, casi negro en claro).</summary>
     public static Color Foreground(bool lightTaskbar) => (lightTaskbar ? s_light : s_dark).Foreground;
 
+    /// <summary>Rojo de la batería baja de Windows para el tema de la barra de tareas.</summary>
+    public static Color Critical(bool lightTaskbar) => (lightTaskbar ? s_light : s_dark).Critical;
+
     /// <summary>
     /// Solo la batería de Windows (con el rayo si carga), en un recuadro de <paramref name="width"/>×<paramref name="height"/>
     /// (borne incluido). La imagen mide el doble de alto, con la batería centrada, para que
     /// quepa el rayo, que sobresale por arriba.
     /// </summary>
-    public static Bitmap RenderBattery(int width, int height, int? level, LevelBand band, bool charging, string? colorKey, bool lightTaskbar)
+    public static Bitmap RenderBattery(int width, int height, int? level, LevelBand band, bool charging, bool lightTaskbar)
     {
         width = Math.Clamp(width, 8, 512);
         height = Math.Clamp(height, 4, 256);
@@ -118,7 +120,7 @@ public static class TrayIconRenderer
         g.PixelOffsetMode = PixelOffsetMode.Half;
         g.CompositingQuality = CompositingQuality.HighQuality;
 
-        (Color outline, Color fill) = BatteryColors(pal, band, charging, colorKey, lightTaskbar);
+        (Color outline, Color fill) = BatteryColors(pal, band, charging);
         var box = new Rectangle(0, height / 2, width, height);
         Rectangle body = DrawBattery(g, box, outline, fill, level, compact: false);
         if (charging)
@@ -130,17 +132,13 @@ public static class TrayIconRenderer
     }
 
     /// <summary>
-    /// Contorno como el de Windows (rojo si la batería está baja) y relleno del color del
-    /// dispositivo; sin color, los de Windows (verde cargando, rojo casi vacía, si no el del texto).
+    /// Igual que Windows: el contorno siempre del color del texto; el relleno verde mientras
+    /// carga, rojo con la batería baja y, si no, también del color del texto.
     /// </summary>
-    private static (Color Outline, Color Fill) BatteryColors(Palette pal, LevelBand band, bool charging, string? colorKey, bool lightTaskbar)
+    private static (Color Outline, Color Fill) BatteryColors(Palette pal, LevelBand band, bool charging)
     {
-        bool critical = band == LevelBand.Critical && !charging;
-        Color outline = critical ? pal.Critical : pal.Foreground;
-        Color fill = colorKey is string key && DeviceColors.Rgb(key, darkBackground: !lightTaskbar) is uint rgb
-            ? Color.FromArgb(255, (int)(rgb >> 16) & 0xFF, (int)(rgb >> 8) & 0xFF, (int)rgb & 0xFF)
-            : charging ? pal.Success : critical ? pal.Critical : pal.Foreground;
-        return (outline, fill);
+        Color fill = charging ? pal.Success : band == LevelBand.Critical ? pal.Critical : pal.Foreground;
+        return (pal.Foreground, fill);
     }
 
     private static int Stroke(int height) => height >= 14 ? 2 : 1;

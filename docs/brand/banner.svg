@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 600" width="1280" height="600" role="img" aria-labelledby="title desc">
   <title id="title">BatteryTray</title>
-  <desc id="desc">La batería de tus dispositivos Bluetooth en la barra de tareas de Windows: panel al estilo Windows 11 y una batería de color por dispositivo junto al reloj.</desc>
+  <desc id="desc">La batería de tus dispositivos Bluetooth en la barra de tareas de Windows: panel al estilo Windows 11 y baterías iguales que la de Windows junto al reloj.</desc>
   <style>
     .t { font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
     .bar { transform-box: fill-box; transform-origin: left center; animation: grow 1.4s cubic-bezier(.2,.8,.2,1) both; }
@@ -114,7 +114,7 @@
 
       <!-- Fila 1: auriculares (azul) -->
       <g transform="translate(0 120)">
-        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07" stroke="#60CDFF" stroke-width="3"/>
+        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07"/>
         <g transform="translate(792 34)" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round">
           <path d="M-10 5 v-4 a10 10 0 0 1 20 0 v4"/>
           <rect x="-12" y="2" width="5" height="9" rx="2.5" fill="#FFFFFF" stroke="none"/>
@@ -127,23 +127,23 @@
         <rect class="bar d1" x="832" y="61" width="274" height="6" rx="3" fill="#60CDFF"/>
       </g>
 
-      <!-- Fila 2: ratón (morado) -->
+      <!-- Fila 2: ratón, con la batería baja (en rojo, como en Windows) -->
       <g transform="translate(0 206)">
-        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07" stroke="#C5A3FF" stroke-width="3"/>
-        <g transform="translate(792 34)" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round">
+        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07"/>
+        <g transform="translate(792 34)" fill="none" stroke="#D92C2C" stroke-width="2.2" stroke-linecap="round">
           <rect x="-7" y="-11" width="14" height="22" rx="7"/>
           <path d="M0 -11 v7"/>
         </g>
         <text class="t" x="832" y="28" font-size="17" font-weight="700" fill="#FFFFFF">MX Master 3S</text>
-        <text class="t" x="1166" y="28" font-size="17" font-weight="700" fill="#FFFFFF" text-anchor="end">46 %</text>
-        <text class="t" x="832" y="50" font-size="13.5" fill="#A9B3C9">Conectado</text>
+        <text class="t" x="1166" y="28" font-size="17" font-weight="700" fill="#FFFFFF" text-anchor="end">12 %</text>
+        <text class="t" x="832" y="50" font-size="13.5" fill="#A9B3C9">Conectado · Batería baja</text>
         <rect x="832" y="62" width="334" height="4" rx="2" fill="#FFFFFF" fill-opacity="0.16"/>
-        <rect class="bar d2" x="832" y="61" width="154" height="6" rx="3" fill="#C5A3FF"/>
+        <rect class="bar d2" x="832" y="61" width="40" height="6" rx="3" fill="#D92C2C"/>
       </g>
 
-      <!-- Fila 3: mando (naranja), cargando -->
+      <!-- Fila 3: mando, cargando (verde, como en Windows) -->
       <g transform="translate(0 292)">
-        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07" stroke="#FFAE57" stroke-width="3"/>
+        <circle cx="792" cy="34" r="23" fill="#FFFFFF" fill-opacity="0.07"/>
         <g transform="translate(792 34)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
           <path d="M-9 -6 h18 a6 6 0 0 1 5.8 4.5 l2.2 8 a3.5 3.5 0 0 1 -6 3 l-3 -3.5 h-14 l-3 3.5 a3.5 3.5 0 0 1 -6 -3 l2.2 -8 a6 6 0 0 1 5.8 -4.5 z"/>
           <path d="M-8 -1 v5 M-10.5 1.5 h5"/>
@@ -154,7 +154,7 @@
         <text class="t" x="1166" y="28" font-size="17" font-weight="700" fill="#FFFFFF" text-anchor="end">64 %</text>
         <text class="t" x="832" y="50" font-size="13.5" fill="#A9B3C9">Conectado · Cargando</text>
         <rect x="832" y="62" width="334" height="4" rx="2" fill="#FFFFFF" fill-opacity="0.16"/>
-        <rect class="bar d3" x="832" y="61" width="214" height="6" rx="3" fill="#FFAE57"/>
+        <rect class="bar d3" x="832" y="61" width="214" height="6" rx="3" fill="#9FD89F"/>
       </g>
 
       <!-- Pie del panel -->
@@ -174,17 +174,17 @@
       <g transform="translate(806 488)">
         <rect x="1" y="1" width="36" height="18" rx="5.5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
         <rect x="38" y="6.5" width="2.2" height="7" rx="1" fill="#FFFFFF"/>
-        <rect class="bar d4" x="4" y="4" width="25" height="12" rx="1.5" fill="#60CDFF"/>
+        <rect class="bar d4" x="4" y="4" width="25" height="12" rx="1.5" fill="#FFFFFF"/>
       </g>
       <g transform="translate(862 488)">
         <rect x="1" y="1" width="36" height="18" rx="5.5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
         <rect x="38" y="6.5" width="2.2" height="7" rx="1" fill="#FFFFFF"/>
-        <rect class="bar d5" x="4" y="4" width="14" height="12" rx="1.5" fill="#C5A3FF"/>
+        <rect class="bar d5" x="4" y="4" width="5" height="12" rx="1.5" fill="#D92C2C"/>
       </g>
       <g transform="translate(918 488)">
         <rect x="1" y="1" width="36" height="18" rx="5.5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
         <rect x="38" y="6.5" width="2.2" height="7" rx="1" fill="#FFFFFF"/>
-        <g class="bar d6"><rect class="charge" x="4" y="4" width="20" height="12" rx="1.5" fill="#FFAE57"/></g>
+        <g class="bar d6"><rect class="charge" x="4" y="4" width="20" height="12" rx="1.5" fill="#9FD89F"/></g>
         <!-- Rayo recortado (contorno del color de la barra) -->
         <path class="pulse" d="M21 -5 L12 9 L18 9 L15.5 21 L25.5 6.5 L19.5 6.5 L22 -5 Z" fill="#FFFFFF" stroke="#151A27" stroke-width="2.6" stroke-linejoin="round" paint-order="stroke"/>
       </g>

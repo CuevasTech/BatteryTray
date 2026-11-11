@@ -90,48 +90,36 @@ public sealed class SettingsTests : IDisposable
     }
 
     [Fact]
-    public void AssignMissingColors_GivesDistinctStableColors()
+    public void Load_OldSettingsWithDeviceColors_StillWork()
     {
-        var s = new AppSettings();
-        BatteryDevice[] devices =
-        [
-            new() { Id = "bt:1", Name = "A", Kind = DeviceKind.Mouse, Source = "t" },
-            new() { Id = "bt:2", Name = "B", Kind = DeviceKind.Headphones, Source = "t" },
-            new() { Id = "system:battery", Name = "PC", Kind = DeviceKind.Computer, Source = "t" },
-        ];
-
-        Assert.True(s.AssignMissingColors(devices));
-        Assert.False(s.AssignMissingColors(devices)); // ya tienen color: nada cambia
-
-        Assert.Equal("blue", s.DeviceColors["bt:1"]);
-        Assert.Equal("purple", s.DeviceColors["bt:2"]);
-        Assert.Equal(DeviceColors.None, s.DeviceColors["system:battery"]);
-        Assert.Equal("blue", s.DeviceColor(devices[0]));
-        Assert.Null(s.DeviceColor(devices[2]));
-
-        s.ColorPerDevice = false;
-        Assert.Null(s.DeviceColor(devices[0]));
-    }
-
-    [Fact]
-    public void NextFree_ReusesPaletteWhenFull()
-    {
-        Assert.Equal("orange", DeviceColors.NextFree(["blue", "purple"]));
-        Assert.Contains(DeviceColors.NextFree(DeviceColors.Palette), DeviceColors.Palette);
-    }
-
-    [Fact]
-    public void Normalize_DropsUnknownColors()
-    {
-        var s = new AppSettings
+        // Las versiones de prueba guardaban un color por dispositivo; esa función ya no existe
+        // y esos campos se ignoran sin perder el resto de ajustes.
+        string dir = Path.Combine(Path.GetTempPath(), "bt-tests-" + Guid.NewGuid().ToString("N"));
+        string path = Path.Combine(dir, "settings.json");
+        try
         {
-            DeviceColors = new() { ["bt:1"] = "blue", ["bt:2"] = "javascript:alert(1)", ["bt:3"] = DeviceColors.None },
-        };
+            Directory.CreateDirectory(dir);
+            File.WriteAllText(path, """
+                {
+                  "schemaVersion": 1,
+                  "colorPerDevice": true,
+                  "deviceColors": { "bt:1": "blue" },
+                  "lowBatteryThreshold": 30,
+                  "placement": "Taskbar"
+                }
+                """);
 
-        s.Normalize();
+            AppSettings s = JsonStore.LoadSettings(path);
+            Assert.Equal(30, s.LowBatteryThreshold);
+            Assert.Equal(DisplayPlacement.Taskbar, s.Placement);
 
-        Assert.Equal(2, s.DeviceColors.Count);
-        Assert.False(s.DeviceColors.ContainsKey("bt:2"));
+            JsonStore.SaveSettings(path, s);
+            Assert.DoesNotContain("deviceColors", File.ReadAllText(path), StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
     }
 
     [Fact]
@@ -167,11 +155,10 @@ public sealed class SettingsTests : IDisposable
     }
 
     [Fact]
-    public void Defaults_UseWindowsBatteryStyleWithColors()
+    public void Defaults_UseWindowsBatteryStyle()
     {
         var s = new AppSettings();
         Assert.Equal(IconStyle.WindowsBattery, s.IconStyle);
-        Assert.True(s.ColorPerDevice);
     }
 
     [Fact]

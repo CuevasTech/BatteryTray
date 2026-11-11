@@ -53,7 +53,7 @@ Respuestas al cuestionario: tipo **Utilidad / herramienta**. Sin violencia, sin 
 ```
 La batería de tus dispositivos Bluetooth, siempre a la vista en la barra de tareas.
 
-BatteryTray pone en la barra de tareas la batería de tus auriculares, ratón, teclado o mando, con el mismo aspecto que el icono de batería de Windows 11. Cada dispositivo tiene su propio color para distinguirlos de un vistazo, el borde se pone rojo cuando queda poca batería y aparece el rayo mientras se carga.
+BatteryTray pone en la barra de tareas la batería de tus auriculares, ratón, teclado o mando, con el mismo aspecto que el icono de batería de Windows 11. Como en Windows, se pone roja cuando queda poca batería (y el icono del dispositivo también, para que lo veas de un vistazo) y verde con el rayo mientras se carga.
 
 Tú eliges dónde: como iconos junto al reloj o como una barra dentro de la propia barra de tareas, con la batería y el porcentaje de cada dispositivo. Pasa el ratón por encima para ver su nombre.
 
@@ -75,8 +75,8 @@ Consejo: Windows 11 esconde los iconos nuevos tras la flecha ^. Para verlos siem
 ```
 Batería de cada dispositivo Bluetooth en la barra de tareas
 Como iconos junto al reloj o como una barra dentro de la barra de tareas
-Iconos iguales que la batería de Windows 11, con un color por dispositivo
-Borde rojo con batería baja y rayo al cargar
+Iconos iguales que la batería de Windows 11
+En rojo con batería baja y en verde al cargar, como en Windows
 Panel al estilo Windows 11 con todos tus dispositivos
 Aviso cuando un dispositivo se queda sin batería
 Último nivel conocido de los dispositivos desconectados
@@ -115,7 +115,7 @@ bandeja
 ```
 Your Bluetooth devices' battery, always in sight on the taskbar.
 
-BatteryTray puts the battery level of your headphones, mouse, keyboard or controller in the taskbar, looking just like the Windows 11 battery icon. Each device gets its own color so you can tell them apart at a glance, the outline turns red when the battery is low and a bolt appears while charging.
+BatteryTray puts the battery level of your headphones, mouse, keyboard or controller in the taskbar, looking just like the Windows 11 battery icon. Just like Windows, it turns red when the battery is low (and so does the device's icon, so you notice at a glance) and green with a bolt while charging.
 
 You choose where: as icons next to the clock, or as a bar right inside the taskbar with each device's battery and percentage. Hover over it to see its name.
 
@@ -137,8 +137,8 @@ Tip: Windows 11 hides new tray icons behind the ^ arrow. To always see them, cho
 ```
 Battery level of each Bluetooth device in the taskbar
 As icons next to the clock or as a bar inside the taskbar
-Icons that look like the Windows 11 battery, with a color per device
-Red outline when low, bolt while charging
+Icons that look just like the Windows 11 battery
+Red when low and green while charging, like Windows
 Windows 11–style flyout with all your devices
 Low-battery notifications
 Last known level of disconnected devices

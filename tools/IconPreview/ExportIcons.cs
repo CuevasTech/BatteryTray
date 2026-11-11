@@ -15,11 +15,11 @@ string outDir = args.Length > 0 ? args[0] : ".";
 Directory.CreateDirectory(outDir);
 (string Name, TrayIconSpec Spec)[] icons =
 [
-    ("mouse", new(21, LevelBand.Normal, false, DeviceKind.Mouse, IconStyle.WindowsBattery, "blue")),
-    ("headphones", new(80, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.WindowsBattery, "purple")),
-    ("gamepad", new(70, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.WindowsBattery, "orange")),
-    ("low", new(12, LevelBand.Critical, false, DeviceKind.Keyboard, IconStyle.WindowsBattery, "pink")),
-    ("system", new(98, LevelBand.Normal, false, DeviceKind.Computer, IconStyle.WindowsBattery, null)),
+    ("mouse", new(12, LevelBand.Critical, false, DeviceKind.Mouse, IconStyle.WindowsBattery)),
+    ("headphones", new(80, LevelBand.Normal, false, DeviceKind.Headphones, IconStyle.WindowsBattery)),
+    ("gamepad", new(70, LevelBand.Normal, true, DeviceKind.Gamepad, IconStyle.WindowsBattery)),
+    ("low", new(12, LevelBand.Critical, false, DeviceKind.Keyboard, IconStyle.WindowsBattery)),
+    ("system", new(98, LevelBand.Normal, false, DeviceKind.Computer, IconStyle.WindowsBattery)),
 ];
 foreach ((string name, TrayIconSpec spec) in icons)
 {
@@ -41,9 +41,9 @@ foreach ((string lang, string format) in new[] { ("es", "{0} %"), ("en", "{0}%")
 {
     TaskbarItemSpec[] bar =
     [
-        new("mouse", 47, LevelBand.Normal, false, DeviceKind.Mouse, "blue", string.Format(format, 47), ""),
-        new("headphones", 82, LevelBand.Normal, false, DeviceKind.Headphones, "purple", string.Format(format, 82), ""),
-        new("gamepad", 64, LevelBand.Normal, true, DeviceKind.Gamepad, "orange", string.Format(format, 64), ""),
+        new("mouse", 12, LevelBand.Critical, false, DeviceKind.Mouse, string.Format(format, 12), ""),
+        new("headphones", 82, LevelBand.Normal, false, DeviceKind.Headphones, string.Format(format, 82), ""),
+        new("gamepad", 64, LevelBand.Normal, true, DeviceKind.Gamepad, string.Format(format, 64), ""),
     ];
     foreach (bool light in new[] { false, true })
     {

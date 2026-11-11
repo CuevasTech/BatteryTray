@@ -115,7 +115,6 @@ internal sealed class TrayController : IDisposable
                 d.GetBand(s.LowBatteryThreshold),
                 d.IsCharging,
                 d.Kind,
-                s.DeviceColor(d),
                 Loc.Format("Percent", d.Level),
                 Tooltip(d, s)))
             .ToList();
@@ -124,14 +123,14 @@ internal sealed class TrayController : IDisposable
         {
             // Sin dispositivos queda el logo, para poder abrir la app.
             string tip = visible.Count > 0 ? SummaryTooltip(visible, s) : Loc.Get("TrayNoDevices");
-            items.Add(new TaskbarItemSpec(MainKey, null, LevelBand.Unknown, false, DeviceKind.Unknown, null, "", tip, IsAppIcon: true));
+            items.Add(new TaskbarItemSpec(MainKey, null, LevelBand.Unknown, false, DeviceKind.Unknown, "", tip, IsAppIcon: true));
         }
 
         return items;
     }
 
     private static TrayIconSpec Spec(BatteryDevice d, AppSettings s) =>
-        new(d.Level, d.GetBand(s.LowBatteryThreshold), d.IsCharging, d.Kind, s.IconStyle, s.DeviceColor(d));
+        new(d.Level, d.GetBand(s.LowBatteryThreshold), d.IsCharging, d.Kind, s.IconStyle);
 
     private static string Tooltip(BatteryDevice d, AppSettings s)
     {

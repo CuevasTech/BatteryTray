@@ -9,6 +9,22 @@
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
 
+            <!-- Los mismos colores que el icono de batería de Windows 11 (batería baja y cargando). -->
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="BatteryLowBrush" Color="#D92C2C" />
+                    <SolidColorBrush x:Key="BatteryChargingBrush" Color="#9FD89F" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="BatteryLowBrush" Color="#C50F1F" />
+                    <SolidColorBrush x:Key="BatteryChargingBrush" Color="#107C10" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="HighContrast">
+                    <SolidColorBrush x:Key="BatteryLowBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+                    <SolidColorBrush x:Key="BatteryChargingBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
             <!-- Botón de icono sin fondo, como los de los paneles de Windows 11. -->
             <Style x:Key="FlyoutIconButtonStyle" BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
                 <Setter Property="Background" Value="Transparent" />
