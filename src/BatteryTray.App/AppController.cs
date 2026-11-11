@@ -8,6 +8,7 @@ using BatteryTray.Services;
 using BatteryTray.Tray;
 using BatteryTray.Views;
 using BatteryTray.Windows.Providers;
+using BatteryTray.Windows.Providers.Usb;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
@@ -153,7 +154,7 @@ internal sealed class AppController
         _monitorIsDemo = Settings.DemoMode;
         IBatteryProvider[] providers = _monitorIsDemo
             ? [new DemoBatteryProvider()]
-            : [new BluetoothBatteryProvider(), new SystemBatteryProvider(Loc.Get("ThisPc"))];
+            : [new BluetoothBatteryProvider(), new UsbBatteryProvider(), new XboxControllerProvider(), new SystemBatteryProvider(Loc.Get("ThisPc"))];
 
         Dictionary<string, CachedReading>? cache = _monitorIsDemo ? null : JsonStore.LoadCache(AppInfo.CachePath);
         var monitor = new BatteryMonitor(providers, cache);

@@ -1,6 +1,6 @@
 # Política de privacidad / Privacy policy
 
-*Última actualización / Last updated: 2026-11-10*
+*Última actualización / Last updated: 2026-11-11*
 
 ## Español
 
@@ -11,12 +11,13 @@ Battery Tray es una app de código abierto que muestra la batería de tus dispos
 Para funcionar, lee en tu propio equipo:
 
 - La lista de dispositivos Bluetooth emparejados (nombre, tipo, estado de conexión y nivel de batería).
+- Los ratones, teclados, cascos y mandos conectados por USB o con su receptor (fabricante, modelo, nombre y nivel de batería). Para saber su batería, la app les hace solo consultas de lectura; nunca cambia su configuración.
 - La batería del propio equipo, si la tiene.
 
 Y guarda, **solo en tu equipo**, en la carpeta privada de la app (puedes abrirla desde *Ajustes > Avanzado > Registros*):
 
 - `settings.json`: tus ajustes (idioma, iconos, avisos, nombres que pongas a los dispositivos).
-- `cache.json`: el último nivel conocido de cada dispositivo, con su nombre y un identificador basado en su dirección Bluetooth.
+- `cache.json`: el último nivel conocido de cada dispositivo, con su nombre y un identificador basado en su dirección Bluetooth o, en los USB, un resumen (hash) de su número de serie que no permite recuperarlo.
 - `logs\`: registros técnicos para resolver fallos. Las direcciones Bluetooth se guardan ocultas en parte.
 
 El botón *Copiar diagnóstico* copia un informe al portapapeles; solo sale de tu equipo si tú decides pegarlo en algún sitio. Las direcciones Bluetooth aparecen ocultas en ese informe.
@@ -34,12 +35,13 @@ Battery Tray is an open-source app that shows your devices' battery levels in th
 To work, it reads on your own computer:
 
 - The list of paired Bluetooth devices (name, type, connection state and battery level).
+- Mice, keyboards, headsets and controllers connected by USB or through their receiver (manufacturer, model, name and battery level). To read their battery, the app only sends read queries; it never changes their settings.
 - The computer's own battery, if it has one.
 
 It stores, **only on your computer**, in the app's private folder (you can open it from *Settings > Advanced > Logs*):
 
 - `settings.json`: your settings (language, icons, alerts, custom device names).
-- `cache.json`: the last known level of each device, with its name and an identifier based on its Bluetooth address.
+- `cache.json`: the last known level of each device, with its name and an identifier based on its Bluetooth address or, for USB devices, a hash of its serial number.
 - `logs\`: technical logs to troubleshoot problems. Bluetooth addresses are partially masked.
 
 The *Copy diagnostics* button copies a report to the clipboard; it only leaves your computer if you choose to paste it somewhere. Bluetooth addresses are masked in that report.
