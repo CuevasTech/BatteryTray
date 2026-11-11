@@ -48,7 +48,7 @@
 </table>
 
 <p align="center">
-  <sub>Works with Bluetooth headphones, speakers, mice, keyboards and controllers that report their battery to Windows, plus your laptop's own battery.<br>2.4 GHz USB receivers (Logitech, Razer…) aren't supported yet.</sub>
+  <sub>Works with Bluetooth devices, with Logitech (Lightspeed, Bolt, Unifying), Razer, SteelSeries, Corsair, HyperX, ASUS ROG, Glorious, Pulsar and other receivers and cables,<br>with Xbox, PlayStation and Switch controllers, with gaming headsets from many brands and with your laptop's own battery.</sub>
 </p>
 
 <p align="center">

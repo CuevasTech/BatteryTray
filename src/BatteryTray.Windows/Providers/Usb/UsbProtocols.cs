@@ -17,6 +17,8 @@ internal static class UsbProtocols
         new Razer(),
         new RazerHeadset(),
         new PassiveGamepads(),
+        new GamingMice(),
+        new CorsairSlipstream(),
         new StandardHidBattery(),
     ];
 }

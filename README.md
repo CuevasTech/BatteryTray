@@ -48,7 +48,7 @@
 </table>
 
 <p align="center">
-  <sub>Funciona con auriculares, altavoces, ratones, teclados y mandos Bluetooth que informan de su batería a Windows, y con la del portátil.<br>Los receptores USB de 2,4 GHz (Logitech, Razer…) todavía no.</sub>
+  <sub>Funciona con aparatos Bluetooth, con los receptores y cables de Logitech (Lightspeed, Bolt, Unifying), Razer, SteelSeries, Corsair, HyperX, ASUS ROG, Glorious, Pulsar y más,<br>con mandos de Xbox, PlayStation y Switch, con cascos de juego de muchas marcas y con la batería del portátil.</sub>
 </p>
 
 <p align="center">

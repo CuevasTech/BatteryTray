@@ -120,8 +120,8 @@ internal static unsafe class HidEnumerator
     private static readonly (ushort Page, ushort Usage)[] s_batteryUsages =
     [
         (0x06, 0x20), // Generic Device Controls: Battery Strength
-        (0x85, 0x65), // Battery System: AbsoluteStateOfCharge
-        (0x85, 0x66), // Battery System: RemainingCapacity (en % si la unidad es relativa)
+        (0x85, 0x65), // Battery System: AbsoluteStateOfCharge (%)
+        (0x85, 0x64), // Battery System: RelativeStateOfCharge (%)
         (0x0D, 0x3B), // Digitizers: Battery Strength (lápices)
     ];
 
@@ -280,7 +280,7 @@ internal static unsafe class HidEnumerator
                     continue;
                 }
 
-                if (s_batteryUsages.Contains((v.UsagePage, v.UsageMinOrUsage)) && v.LogicalMax > v.LogicalMin)
+                if (s_batteryUsages.Contains((v.UsagePage, v.UsageMinOrUsage)) && v.LogicalMax != v.LogicalMin)
                 {
                     found.Add(new HidValueInfo(type, v.ReportID, v.UsagePage, v.UsageMinOrUsage, v.LinkCollection, v.LogicalMin, v.LogicalMax, v.BitSize));
                 }
